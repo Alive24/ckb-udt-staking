@@ -9,7 +9,7 @@
 
   # The directory that contains the built site.
   # This is relative to the repository root.
-  publish = "dapp/.next"
+  publish = ".next"
 
 [[plugins]]
   # Essential plugin for deploying Next.js sites on Netlify.
