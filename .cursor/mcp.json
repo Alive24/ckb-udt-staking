@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+      "mcp_shrimp-task-manager": {
+        "command": "npx",
+        "args": ["-y", "mcp-shrimp-task-manager"],
+        "env": {
+          "DATA_DIR": "/Volumes/Bohemialive/GitHub/ckb-udt-staking/.shrimp",
+          "TEMPLATES_USE": "en",
+          "ENABLE_GUI": "true"
+        }
+      }
+    }
+  }
+  

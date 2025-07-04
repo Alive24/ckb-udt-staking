@@ -1,0 +1,344 @@
+<context>
+# Overview  
+The CKB UDT Staking Framework is a general-purpose, fully decentralized infrastructure that enables any UDT token project to implement comprehensive staking reward programs on the Nervos CKB blockchain. The framework supports both traditional possession-based rewards (airdrop model) and liquid staking with LST minting, providing maximum flexibility for diverse token economics while maintaining complete decentralization through immutable, time-locked configurations.
+
+The platform solves the fundamental problem of lacking standardized, decentralized staking and reward distribution infrastructure in the CKB ecosystem. It addresses: (1) absence of generic staking and reward frameworks for any UDT token, (2) need for both traditional airdrop and liquid staking reward models, (3) requirement for automated reward distribution without admin controls, (4) demand for time-period based reward distribution systems, and (5) necessity for time-locked configurations that prevent manipulation after deployment.
+
+The framework targets any UDT token project seeking to implement staking reward programs through airdrop or issuance models. Projects deposit reward amounts for specific time periods, and token holders automatically receive distributions based on their staking history during those periods. The system operates through public key-based configuration setup with time-locked immutability and fully automated execution without any governance mechanisms.
+
+The value proposition centers on providing a universal framework where any token project can deploy staking reward programs with configurable parameters, enabling traditional airdrop-style staking rewards initially and liquid staking issuance subsequently, all through simple deposit-based reward pools without requiring centralized administration or governance - achieving true set-and-forget decentralized reward distribution infrastructure.
+
+# Core Features  
+**Generic UDT Staking Reward Framework**
+- Universal staking reward infrastructure supporting any UDT token through configurable token addresses
+- Single-token staking reward program model where each program configures rewards for one specific UDT token
+- **Two reward approaches**: Traditional possession-based rewards (airdrop model) and liquid staking with LST minting
+- **Possession-based rewards**: Reward existing token holders based on their holdings across time periods without minting new tokens
+- Real-time reward calculations and distribution tracking for the configured token
+- Framework reusability allowing different token projects to create their own independent staking reward programs
+
+**Traditional Airdrop-Style Possession Rewards (Phase 1)**
+- **Possession Across Time Periods**: Reward token holders based on their possession/holding patterns across defined time periods without requiring new staking actions
+  - **No New Token Minting**: Works with existing token holdings - rewards holders of already staked tokens or tokens locked in specific lock code hashes
+  - **Flexible Target Selection**: Can target regular UDT tokens, already staked tokens, or tokens locked with specific lock code hashes
+- **Snapshot-Based Possession Tracking**: 
+  - **Periodic Snapshots**: Snapshots taken periodically to evaluate average token possession during time periods
+  - **Public Trigger System**: Trigger-based snapshots with logic stored on website, chronologically triggerable by AWS Lambda functions or manually
+  - **Trigger Payment Model**: Trigger initiator pays for transaction costs
+  - **Public Authorization**: Anyone can trigger snapshots and get same results following Type rules
+  - **Inclusion-Only Policy**: Cannot remove existing snapshots showing others' possession, but can add your own snapshot if you possess tokens
+- **Deposit-Based Reward Model**: Airdrop reward programs deposit total reward amounts upfront for specific time periods
+  - **Automatic Distribution**: At period conclusion, rewards automatically distributed based on possession history during that period
+  - **Time-Based Calculation**: Rewards calculated based on average possession from periodic snapshots during the period
+- **Set-and-Forget Operation**: No ongoing management required - fully automated distribution based on deposited amounts and period parameters
+
+**Liquid Staking with LST Minting Infrastructure (Phase 2)**
+- **Actual Liquid Staking**: Users stake UDT tokens and receive liquid staking tokens (LSTs) representing their staked positions
+  - **LST Token Minting**: New LST tokens minted to represent staked UDT positions
+  - **CKB Time-Lock Integration**: Support for CKB time-lock mechanisms to enforce staking periods and require specific time-lock conditions when staking UDT tokens (to be implemented)
+- **Pool-Based Reward Model**: Token projects can deposit reward tokens to the staking pool anytime at any amount
+  - **Exchange Ratio Enhancement**: Reward deposits increase the LST-to-underlying token exchange ratio, benefiting all LST holders proportionally.
+  - **Continuous Pool Deposits**: Reward tokens can be deposited to staking pool at any time, immediately enhancing the exchange ratio for all LST holders
+- **Secondary Market & Unstaking**:
+  - Secondary market support for LST trading while maintaining underlying staked positions
+  - Unstaking mechanisms through LST burning with time-lock expiration and configurable cooldown periods
+  - Cross-protocol LST integration capabilities for DeFi composability
+
+**Decentralized Configuration System**
+- **Initial Configuration Setup**: Public key-based configuration for reward parameters and time periods
+  - Time-locked configuration immutability preventing any modifications after program setup period
+  - Configurable setup period (e.g., 7 days) during which contributors can set parameters
+  - Multi-signature configuration validation requiring multiple public key confirmations
+- **Automated Finalization**: 
+  - Automated parameter finalization after time-lock expiration with no admin override capabilities
+  - Transparent configuration history and immutable audit trail on-chain
+- **Reward Period Management**: Configuration for time periods, deposit amounts, and distribution methods
+
+**Automated Reward Distribution**
+- **Airdrop/Possession-Based Distribution (Period-Based)**:
+  - **Triggered Distribution**: Rewards distributed at period conclusion, triggerable by anyone based on possession histories
+  - **Public Trigger Authorization**: Anyone can trigger reward distribution following possession history verification rules
+  - **Deposit Management**: Token projects deposit total reward amounts upfront for each period
+  - Automated reward calculation based on possession history during the period and configured parameters
+  - Multiple reward token support (native CKB, any UDT tokens) through token address configuration
+  - Fair distribution algorithms considering possession weight, duration within period, and participation patterns
+  - Historical reward tracking across all periods and distributions
+- **Liquid Staking Distribution (Continuous)**:
+  - **No Distribution Required**: Reward deposits automatically enhance LST exchange ratio without distribution actions
+  - **Immediate Effect**: Pool deposits instantly benefit all LST holders proportionally through improved exchange ratio
+  - **Continuous Operation**: Programs can deposit rewards anytime, immediately affecting the staking pool value
+- **Set-and-Forget Model**: No ongoing management required after initial configuration
+
+
+**Universal Dashboard and Analytics**
+- **Real-Time Overview**: Real-time overview showing staking positions and possession rewards for the specific token's staking reward program
+  - **Period-Based Tracking**: Display current and historical reward periods with participation status
+  - Comprehensive earnings history showing distributed rewards from completed periods
+  - **Pending Rewards**: Track upcoming distributions and user's expected allocation based on current period participation
+- **Token-Specific Analytics**:
+  - Token-specific analytics and performance tracking for the staking reward program
+  - Market analytics for the specific UDT token with configurable data sources
+  - Personal performance metrics and reward optimization for the configured token
+- **Framework Management**:
+  - Staking reward program setup interface for new token projects to configure their reward parameters and periods
+  - Mobile-responsive design with wallet integration and fully decentralized backend architecture
+
+# User Experience  
+**Primary User Personas**
+- Token Project Developers: Teams launching UDT tokens who need standardized reward distribution infrastructure for their specific token
+- DeFi Enthusiasts: Users seeking yield opportunities on specific UDT tokens through period-based reward programs
+- Long-term Token Holders: Investors wanting to earn passive income through possession rewards during defined periods
+- Liquid Staking Users: Advanced users seeking liquid staking capabilities for improved capital efficiency during reward periods
+- Framework Contributors: Developers and stakeholders participating in decentralized framework development and deployment
+- Token Community Members: Users participating in token-specific reward periods and claiming distributions
+- API Trigger Users: Anyone who can call public Netlify APIs to trigger snapshots, distributions, or other processes when needed
+
+**Key User Flows**
+
+**Common/Shared Flows (Both Modes)**
+1. **Staking Reward Program Setup**: Framework access → Single token configuration → Reward approach selection (Possession-Based/Liquid Staking) → Configuration parameters setup → Multi-sig confirmation → Time-locked program launch  
+2. **Manual Process Triggering**: Dashboard access → Process monitoring → Manual trigger of snapshots, distributions, or validations via public APIs when needed (e.g., possession not entered properly)
+3. **Framework Contribution**: Configuration period participation → Parameter setting → Multi-sig validation → Immutable program confirmation
+
+**Airdrop/Possession-Based Mode Flows**
+1. **Reward Period Setup**: Reward amount deposit → Period duration configuration → Target selection (existing tokens/lock code hash) → Period activation via API trigger
+2. **Possession-Based Participation**: Wallet connection → Automatic eligibility detection for token holdings during active periods → Periodic snapshots triggered via public APIs → Period conclusion → Trigger distribution via public Netlify API (usually by project team via AWS Lambda, but anyone can call) → Claim distributed rewards
+3. **Period-Based Reward Management**: Dashboard access → Period participation monitoring → Distribution claiming → Historical reward tracking across periods
+
+**Liquid Staking Mode Flows**
+1. **Liquid Staking Flow**: Wallet connection → UDT token staking → LST minting → Time-lock enforcement → Continuous staking pool reward deposits (enhancing LST exchange ratio automatically) → LST burning for unstaking after time-lock expiration
+2. **LST Secondary Market**: LST trading while maintaining underlying staked positions → Market price discovery → Liquidity provision
+3. **Continuous Reward Management**: Dashboard access → LST position monitoring → Exchange ratio tracking → Real-time reward benefit display
+
+**UI/UX Considerations**
+- **Universal Design**: Universal interface design supporting any UDT token through dynamic configuration
+  - **Clear distinction between reward approaches**: Direct possession rewards (passive) vs. pool-based staking (active) with educational guidance
+  - **Simplified user experience for possession rewards**: Automatic eligibility display based on current token holdings without requiring user action
+- **Program Setup & Configuration**:
+  - Staking reward program setup wizard with reward approach selection and step-by-step configuration assistance
+  - Progressive disclosure from basic possession rewards to advanced pool-based staking and liquid staking
+- **Trigger-Based Process Management**:
+  - **Manual Trigger Interface**: UI buttons for manually triggering snapshots, distributions, and validations via public Netlify APIs
+  - **Process Status Monitoring**: Real-time status indicators showing when processes need triggering or are running
+  - **Public API Documentation**: Clear guidance on when and how anyone can trigger processes manually
+  - **Trigger History**: Display of recent API trigger events with timestamps and initiators for transparency
+- **Real-Time Interface**:
+  - Real-time updates showing both passive holdings eligibility and active staking positions
+  - Framework-agnostic design patterns that work regardless of underlying token economics or reward model
+  - Comprehensive help system explaining the differences between possession rewards and active staking
+- **Accessibility & Integration**:
+  - Accessibility compliance (WCAG 2.1) and mobile optimization for global reach
+  - Integration with popular CKB wallets (Neuron, Portal, JoyID) with automatic token detection and balance tracking
+  - Multi-language support with community-driven localization framework
+</context>
+<PRD>
+# Technical Architecture  
+**System Components**
+- **Frontend Layer**:
+  - Frontend: React application with TypeScript, CCC integration for wallet connectivity, token deployment wizard. Based on Next.js and Tailwind CSS. Deployed on Netlify.
+- **Smart Contract Layer**:
+  - Smart Contracts: Rust-based CKB scripts for possession tracking with period-based reward distribution, and liquid staking tokens (LST) with continuous pool rewards
+  - SSRI Protocol: Rust-based CKB scripts for SSRI protocol, including SSRI token, SSRI staking, and SSRI unstaking.
+  - **CKB Time-Lock System**: Time-lock script implementation for enforcing staking periods (to be implemented separately)
+  - Configuration: Immutable smart contracts for time-locked parameter configuration and multi-sig validation
+- **Core Systems**:
+  - **Period Management System**: Automated period lifecycle management, deposit handling, and distribution calculations
+  - **Possession Tracking**: Monitor token holdings across time periods for existing tokens and specific lock code hashes
+    - **Snapshot Triggering System**: Trigger-based snapshot logic stored on website with AWS Lambda and manual triggering capabilities
+    - **Public Trigger Authorization**: TypeScript-based rules allowing anyone to trigger snapshots with consistent results
+    - **Inclusion-Only Snapshot Policy**: Append-only snapshot system preventing removal of existing possession records
+    - **Transaction Cost Attribution**: Trigger initiator responsibility for snapshot transaction costs
+- **Trigger Infrastructure**:
+  - **Netlify Functions**: Public APIs for triggering snapshots, distributions, and validations - callable by anyone, typically by project teams via AWS Lambda/Node.js apps
+  - **CKB Cell Storage**: All data stored on-chain in CKB cells - no traditional backend or database needed
+  - **Blockchain Integration**: CKB node connection, CCC framework for transaction building, generic UDT token interaction
+- **External Integration**:
+  - External Services: Configurable price feed APIs for token valuation and notification services (optional)
+
+**Data Models (Stored in CKB Cells)**
+- **Token configuration cells**: UDT address, reward approach (possession-based/liquid staking), target specifications (lock code hash), and program metadata stored on-chain
+- **Reward period cells**: Period definitions with start/end times, deposit amounts, distribution methods, and status stored in CKB cells
+- **Possession snapshot cells**: Periodic possession snapshots with timestamps, trigger initiators, transaction costs, and inclusion-only append history stored on-chain
+  - **Trigger log cells**: Public trigger events with rule compliance verification and cost attribution tracking
+- **Liquid staking position cells**: Active LST stakes with UDT token amounts, LST minting records, time-lock conditions, and reward history
+- **LST token registry cells**: Liquid staking tokens with underlying UDT asset mapping, time-lock status, continuous pool reward deposits (affecting exchange ratios)
+- **CKB Time-Lock cells**: Time-lock expiration tracking, lock script validation, and unstaking eligibility (future implementation)
+- **Deposit management cells**: Tracking of deposited reward amounts, distribution schedules, and remaining balances in CKB cells
+- **Configuration cells**: Parameter proposals, multi-sig validations, and time-lock status stored on-chain
+- **Transaction history**: All events logged on-chain through CKB transactions - possession tracking, LST operations, distributions, and claims
+
+**APIs and Integrations**
+- **CCC**: Wallet integration with automatic token detection
+- **Public Trigger APIs**: Netlify Functions for triggering snapshots, distributions, and validations - callable by anyone following verification rules
+- **CKB Cell Reading APIs**: On-chain data retrieval from CKB cells for configuration, periods, snapshots, and positions
+- **Transaction Building APIs**: CCC framework integration for constructing CKB transactions
+- **Optional External Services**: Configurable price feed integrations for token valuation (when needed)
+
+**Infrastructure Requirements**
+- **CKB Node Access**: CKB testnet/mainnet node access with high availability for single-token staking reward programs
+- **Serverless Functions**: Netlify Functions for public trigger APIs - no traditional backend servers needed
+- **CDN**: Global asset delivery for frontend application performance optimization
+- **Monitoring**: Automated monitoring for framework health and trigger function status
+
+# Development Roadmap  
+**Phase 1: Possession-Based Reward Framework (MVP)**
+- **Framework Foundation**:
+  - Generic UDT framework foundation supporting any token through configurable addresses
+  - **Possession across time periods**: Track token holdings across defined time periods for existing tokens, already staked tokens, or specific lock code hashes
+  - **No new token minting**: Reward existing token holders without requiring additional staking actions
+- **Configuration System**:
+  - Public key-based configuration system with time-locked immutability
+  - Multi-signature configuration validation and automated parameter finalization
+- **Core Engine**:
+  - Possession tracking engine monitoring holdings across time periods
+  - **Snapshot System Implementation**: Periodic snapshot triggers with AWS Lambda automation and manual triggering capabilities
+  - **Public Trigger Framework**: TypeScript-based trigger rules with public authorization and consistent result verification
+  - **Inclusion-Only Snapshot Policy**: Append-only snapshot system with transaction cost attribution to trigger initiators
+  - Automated reward calculation based on average possession from periodic snapshots during periods
+- **User Interface**:
+  - Universal web interface supporting possession-based rewards for any UDT token configuration
+  - Staking reward program setup wizard with possession reward and target specification configuration
+  - Wallet integration with CCC and automatic token detection and balance tracking across time periods
+- **Development Infrastructure**:
+  - Local development and testing framework with generic token support
+
+**Phase 2: Liquid Staking with LST Minting Infrastructure**
+- **Core Liquid Staking**:
+  - **Actual liquid staking system**: Users stake UDT tokens and receive LST tokens representing their staked positions
+  - Liquid staking token (LST) smart contract development with continuous pool reward deposits
+  - LST minting mechanisms when users stake UDT tokens
+- **Time-Lock Integration**:
+  - **CKB Time-Lock Integration**: Integration with CKB time-lock system for enforcing staking periods (requires time-lock implementation)
+  - LST burning mechanisms for unstaking after time-lock expiration
+- **Enhanced Reward System**:
+  - **Continuous Pool Rewards**: Reward tokens deposited to staking pool anytime to enhance LST exchange ratio for all holders
+  - Secondary market support infrastructure for LST trading while tokens remain staked
+- **Enhanced UI & Analytics**:
+  - Enhanced dashboard with liquid staking position, time-lock status, and period participation management
+  - Cross-protocol integration capabilities for DeFi composability
+  - Advanced analytics comparing possession-based vs liquid staking performance across periods
+  - LST token metadata and market data integration
+- **Testing & Deployment**:
+  - Automated testing suite for liquid staking, time-lock integration, and period-based mechanisms
+  - Testnet deployment and comprehensive testing
+
+**Phase 3: Advanced Framework Features and Optimization**
+- **Enhanced Period Management**: Multiple simultaneous periods, overlapping rewards, and complex distribution algorithms
+- Advanced period-based analytics and performance optimization tools
+- Mobile-responsive progressive web application
+- Performance optimizations and gas efficiency improvements for period-based operations
+- **Automated Period Lifecycle**: Smart contract automation for period transitions and distributions
+- Comprehensive security audits for both traditional and liquid staking mechanisms
+
+**Phase 4: Ecosystem Expansion and Integration**
+- Multi-language support and internationalization for global token projects
+- Developer documentation and framework integration guides
+- Partner integrations with DeFi protocols for LST composability
+- **Community Templates**: Pre-configured period templates for common reward scenarios
+- Open-source ecosystem development and third-party integration support
+- Advanced distribution algorithms and customizable reward calculation methods
+
+# Logical Dependency Chain
+**Foundation Layer (Must Be Built First)**
+1. Development environment setup with Rust and TypeScript toolchains
+2. CKB development environment and local node setup
+3. Generic UDT token interaction framework and smart contract foundation
+4. Public key-based configuration system with multi-signature validation
+5. Time-locked configuration immutability smart contracts
+6. **CKB cell structure design** for multi-token support and on-chain configuration tracking
+7. Basic React application structure with CCC integration and staking reward program setup wizard
+
+**Possession-Based Reward Core (Build Upon Foundation) - MVP Focus**
+8. **Possession tracking system**: Monitor token holdings across time periods for existing tokens, already staked tokens, or specific lock code hashes
+9. **Snapshot triggering system**: Implement periodic snapshot triggers with AWS Lambda automation, manual triggering, and TypeScript-based public authorization rules
+10. **Inclusion-only snapshot policy**: Append-only snapshot system with transaction cost attribution and removal prevention mechanisms
+11. **Period management system**: Period creation, deposit handling, and automated distribution at conclusion
+12. Automated reward calculation engine for possession-based distribution across periods based on average possession from periodic snapshots
+13. Basic frontend for wallet connection supporting possession-based reward interface and period tracking
+14. Staking reward program setup interface with possession reward parameter configuration, target specification (lock code hash), and period setup  
+15. Multi-signature configuration validation and automated finalization for possession reward model
+16. **Public Netlify APIs** for triggering processes and transaction building with CKB cell data reading for possession tracking, period management, and reward status monitoring
+17. Dashboard showing possession-based rewards, period participation, and claim status for the configured token
+18. **Manual trigger interface** for snapshots, distributions, and validations with public API integration and process status monitoring
+
+**Liquid Staking Infrastructure (Requires Possession-Based Rewards)**
+19. **CKB Time-Lock System Integration**: Integration with CKB time-lock implementation for enforcing staking periods
+20. Liquid staking token (LST) smart contract development for actual UDT token staking
+21. **LST minting mechanisms**: Users stake UDT tokens and receive LST tokens representing their staked positions
+22. **Time-lock enforcement**: Require CKB time-lock conditions when staking UDT tokens
+23. LST burning mechanisms for unstaking after time-lock expiration
+24. **Continuous staking pool rewards**: Reward token deposits to staking pool anytime to enhance LST exchange ratio for all holders
+25. Secondary market support infrastructure for LST trading while underlying tokens remain staked
+26. Enhanced dashboard with liquid staking position, time-lock status, and period participation management
+27. Cross-protocol integration capabilities for DeFi composability
+
+**Advanced Features and Optimization (Requires Liquid Staking)**
+28. **Enhanced period management**: Multiple simultaneous periods and complex distribution algorithms for both possession and staking rewards
+29. Advanced period-based analytics and performance optimization tools comparing possession vs liquid staking
+30. **Automated period lifecycle**: Smart contract automation for period transitions, distributions, and time-lock management
+31. Mobile-responsive design, progressive web app features, security hardening, and mainnet deployment preparation
+
+Each feature is designed to be atomic and independently testable while building the progression from possession-based rewards (MVP priority) to liquid staking with LST minting infrastructure. The dependency chain prioritizes getting possession-based rewards with snapshot-based tracking and period management working first for single-token deployments as the simplest foundation, then adds liquid staking capabilities with CKB time-lock integration and LST minting, and finally advanced period management and optimization features across both reward models.
+
+# Risks and Mitigations  
+**Technical Challenges**
+- Smart contract security vulnerabilities: Implement comprehensive testing, formal verification, and multiple security audits for generic framework
+- Generic UDT token support complexity: Design flexible smart contracts that work with any UDT token while maintaining security
+- Decentralized configuration system security: Ensure robust multi-signature validation and time-lock mechanisms preventing manipulation
+- Liquid staking token (LST) economic model: Design sustainable LST mechanisms that maintain value correlation with underlying assets
+- Cross-token compatibility and standardization: Ensure framework works seamlessly with diverse UDT token implementations
+- Public key management and multi-signature coordination: Implement secure, user-friendly multi-sig workflows for configuration
+
+**MVP Strategy and Scope**
+- Core MVP focuses exclusively on **possession-based rewards with period management** - reward token holders based on their holdings across defined time periods without new token minting
+- **Deposit-based reward model**: Token projects deposit total reward amounts upfront for specific periods, with automatic distribution at conclusion
+- **Target existing holdings**: Reward holders of existing tokens, already staked tokens, or tokens locked with specific lock code hashes
+- Single-token staking reward program model where each program configures rewards for one specific UDT token
+- Prioritize possession tracking over liquid staking for initial validation, as it requires simpler smart contracts and clearer user flows
+- Implement decentralized configuration system first to establish foundation for true decentralization
+- Build liquid staking with LST minting and CKB time-lock integration as separate phase (Phase 2) after possession rewards are working
+- **CKB Time-Lock Dependency**: Liquid staking phase requires CKB time-lock implementation to be completed first
+- Use testnet extensively with single-token staking reward programs to validate possession-based reward model before adding LST complexity
+
+**Resource and Timeline Constraints**
+- Generic framework complexity may require additional development time: Plan modular development with clear separation between possession rewards and pool-based staking
+- Single-token staking reward program testing requires thorough validation: Develop comprehensive testing frameworks for diverse UDT token scenarios
+- Decentralized configuration coordination challenges: Plan clear processes for multi-signature setup and time-lock management
+- Token project adoption and framework education: Create comprehensive documentation for both users and staking reward program creators
+- Direct possession reward simplicity advantage: Reduced complexity compared to multi-token approach allows faster MVP development
+
+**Market and Adoption Risks**
+- Limited UDT token project adoption: Focus on creating easy staking reward program setup experience with simple period-based reward model
+- Competition from centralized reward distribution services: Differentiate through true decentralization, deposit-based transparency, and set-and-forget simplicity
+- Period-based reward model complexity: Design intuitive interface clearly showing period timelines, participation, and expected distributions
+- Regulatory uncertainty around token rewards: Design flexible framework that can adapt to diverse regulatory requirements across token projects through configurable period parameters
+
+# Appendix  
+**Research Findings**
+- CKB ecosystem analysis showing growing demand for DeFi applications
+- Competitive analysis of staking platforms on other blockchains (Ethereum, Solana, Cosmos)
+- User research indicating preference for unified governance and staking interfaces
+- Technical research on CKB script capabilities and optimization strategies
+
+**Technical Specifications**
+- **CKB Script Development**: Rust, ckb-std library, and SSRI Protocol for reward deposit and distribution, and liquid staking tokens (LST)
+- **CKB Time-Lock Implementation**: Custom time-lock script similar to BTC time-lock for enforcing staking periods (to be implemented)
+- **Frontend**: React 18+, TypeScript 5+, Next.js, Tailwind CSS, and staking reward program setup wizard components. Deploy on Netlify.
+- **Serverless Trigger Architecture**: Netlify Functions for public trigger APIs - no traditional backend needed
+- **CKB Cell Storage**: All data stored on-chain in CKB cells - no databases required
+- **CCC Integration**: Seamless wallet connectivity with automatic UDT token detection
+- **On-Chain Data Management**: CKB cell reading and writing for possession tracking, staking positions, and configuration history
+- **Possession Tracking**: Monitor holdings across time periods through CKB cell snapshots for existing tokens and specific lock code hashes
+- **Testing Framework**: Jest, React Testing Library, custom CKB testing utilities, and single-token scenario testing
+- **Multi-Signature Coordination**: On-chain multi-sig tools for decentralized configuration management
+- **Time-Locked Smart Contracts**: Immutable parameter finalization through CKB scripts
+
+**Development Standards**
+- **Code Quality**: ESLint, Prettier, and Clippy configurations for frontend and smart contract development
+- **Git Workflow**: Feature branches, code reviews, and automated testing across framework components
+- **Documentation**: Comprehensive requirements for trigger APIs, smart contract interfaces, period management, and staking reward program setup guides
+- **Security Practices**: Static analysis, dependency scanning, and regular audits for on-chain reward distribution security
+- **Performance Guidelines**: Optimization for single-token operations, period management, and serverless trigger architecture
+- **Framework Versioning**: Backward compatibility standards for staking reward program configurations and on-chain period systems
+- **Open-Source Development**: Community contribution guidelines for trigger-based reward distribution framework
+</PRD> 
