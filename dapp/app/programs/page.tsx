@@ -12,9 +12,15 @@ import {
   AlertTriangle,
   Coins,
   ArrowDownRight,
-  ChevronDown,
+
   RefreshCw,
   HelpCircle,
+  ArrowUpDown,
+  Gift,
+  Clock,
+  Calendar,
+  Camera,
+  TrendingUp,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -24,27 +30,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import Link from "next/link"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 
 export default function ProgramsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [tokenFilter, setTokenFilter] = useState("all")
-  const [expandedPrograms, setExpandedPrograms] = useState<Record<string, boolean>>({})
-
-  const toggleExpand = (programId: string) => {
-    setExpandedPrograms((prev) => ({
-      ...prev,
-      [programId]: !prev[programId],
-    }))
-  }
 
   // Mock wallet balances
   const walletBalances = {
     BANK: "5,420.50",
-    "BANK/CKB": "1,250.00",
-    "BANK/RUSD": "2,100.00",
-    "BANK/BTC": "850.00",
+    CKB: "125,000.00",
+    "LP-UTXOSwap (BANK/CKB)": "1,250.00",
+    "LP-UTXOSwap (BANK/RUSD)": "2,100.00",
+    "LP-UTXOSwap (BANK/BTC)": "850.00",
     NEW: "10,000.00",
     DEMO: "3,500.00",
     TEST: "1,200.00",
@@ -58,7 +56,7 @@ export default function ProgramsPage() {
       tokenSymbol: "BANK",
       tokenLogo: "https://picsum.photos/32/32?random=1",
       description:
-        "BANK token staking rewards program with monthly distribution periods using even distribution. Stake your BANK tokens to earn rewards every 30 days.",
+        "BANK staking with 30-day periods and even distribution.",
       balance: "1,250.00",
       balanceUSD: "$1,875.00",
       balanceCKB: "156,250 CKB",
@@ -71,10 +69,11 @@ export default function ProgramsPage() {
       remainingPeriods: 9,
       periodProgress: 65,
       daysRemaining: 11,
-      estimatedRewards: "45.2",
+      estimatedRewards: "1,250.0",
       estimatedAPY: "18.5%",
-      collectedRewards: "80.6",
+      collectedRewards: "2,480.0",
       rewardToken: "BANK",
+      rewardType: "shared",
       lastSnapshot: "2 hours ago",
       nextSnapshot: "22 hours",
       programStatus: "Ongoing",
@@ -83,21 +82,21 @@ export default function ProgramsPage() {
       minStakeAmount: "100",
       lockRequirement: "Lock until each distribution",
       funding: {
-        funded: "1,000 BANK",
-        fundedUSD: "$1,500.00",
-        fundedCKB: "125,000 CKB",
-        expected: "1,000 BANK",
-        expectedUSD: "$1,500.00",
-        expectedCKB: "125,000 CKB",
+        funded: "4,167 BANK",
+        fundedUSD: "$6,250.50",
+        fundedCKB: "520,875 CKB",
+        expected: "4,167 BANK",
+        expectedUSD: "$6,250.50",
+        expectedCKB: "520,875 CKB",
         completionPercentage: 100,
       },
       totalProgramFunding: {
-        funded: "8,000 BANK",
-        fundedUSD: "$12,000.00",
-        fundedCKB: "1,000,000 CKB",
-        expected: "12,000 BANK",
-        expectedUSD: "$18,000.00",
-        expectedCKB: "1,500,000 CKB",
+        funded: "33,336 BANK",
+        fundedUSD: "$50,004.00",
+        fundedCKB: "4,167,000 CKB",
+        expected: "50,000 BANK",
+        expectedUSD: "$75,000.00",
+        expectedCKB: "6,250,000 CKB",
         completionPercentage: 67,
       },
       canStake: true,
@@ -106,11 +105,11 @@ export default function ProgramsPage() {
     },
     {
       id: "bank-ckb-lp-001",
-      tokenName: "BANK/CKB LP-UTXOSwap",
-      tokenSymbol: "BANK/CKB",
+      tokenName: "BANK/CKB Liquidity Pool on UTXOSwap",
+      tokenSymbol: "LP-UTXOSwap (BANK/CKB)",
       tokenLogo: "https://picsum.photos/32/32?random=6",
       description:
-        "Liquidity provider token staking for BANK/CKB trading pair on UTXOSwap. Earn BANK rewards for providing liquidity to the decentralized exchange.",
+        "Earn BANK rewards by providing BANK/CKB liquidity on UTXOSwap DEX.",
       balance: "850.00",
       balanceUSD: "$2,125.00",
       balanceCKB: "170,000 CKB",
@@ -123,10 +122,11 @@ export default function ProgramsPage() {
       remainingPeriods: 22,
       periodProgress: 45,
       daysRemaining: 8,
-      estimatedRewards: "32.1",
+      estimatedRewards: "178.6",
       estimatedAPY: "22.3%",
-      collectedRewards: "28.4",
+      collectedRewards: "164.3",
       rewardToken: "BANK",
+      rewardType: "shared",
       lastSnapshot: "1 day ago",
       nextSnapshot: "1 day",
       programStatus: "Ongoing",
@@ -135,21 +135,21 @@ export default function ProgramsPage() {
       minStakeAmount: "50",
       lockRequirement: "No time lock",
       funding: {
-        funded: "500 BANK",
-        fundedUSD: "$750.00",
-        fundedCKB: "62,500 CKB",
-        expected: "500 BANK",
-        expectedUSD: "$750.00",
-        expectedCKB: "62,500 CKB",
+        funded: "42,500 BANK",
+        fundedUSD: "$63,750.00",
+        fundedCKB: "5,312,500 CKB",
+        expected: "42,500 BANK",
+        expectedUSD: "$63,750.00",
+        expectedCKB: "5,312,500 CKB",
         completionPercentage: 100,
       },
       totalProgramFunding: {
-        funded: "8,500 BANK",
-        fundedUSD: "$12,750.00",
-        fundedCKB: "1,062,500 CKB",
-        expected: "12,000 BANK",
-        expectedUSD: "$18,000.00",
-        expectedCKB: "1,500,000 CKB",
+        funded: "42,500 BANK",
+        fundedUSD: "$63,750.00",
+        fundedCKB: "5,312,500 CKB",
+        expected: "60,000 BANK",
+        expectedUSD: "$90,000.00",
+        expectedCKB: "7,500,000 CKB",
         completionPercentage: 71,
       },
       canStake: true,
@@ -158,11 +158,11 @@ export default function ProgramsPage() {
     },
     {
       id: "bank-rusd-lp-001",
-      tokenName: "BANK/RUSD LP-UTXOSwap",
-      tokenSymbol: "BANK/RUSD",
+      tokenName: "BANK/RUSD Liquidity Pool on UTXOSwap",
+      tokenSymbol: "LP-UTXOSwap (BANK/RUSD)",
       tokenLogo: "https://picsum.photos/32/32?random=7",
       description:
-        "Liquidity provider token staking for BANK/RUSD stable pair. Earn RUSD rewards for providing liquidity to this stable trading pair with lower volatility.",
+        "Earn RUSD rewards providing stable BANK/RUSD liquidity.",
       balance: "1,200.00",
       balanceUSD: "$3,000.00",
       balanceCKB: "240,000 CKB",
@@ -175,10 +175,11 @@ export default function ProgramsPage() {
       remainingPeriods: null,
       periodProgress: 30,
       daysRemaining: 15,
-      estimatedRewards: "85.7",
+      estimatedRewards: "4,762.0",
       estimatedAPY: "15.8%",
       collectedRewards: "0",
       rewardToken: "RUSD",
+      rewardType: "individual",
       lastSnapshot: "3 hours ago",
       nextSnapshot: "21 hours",
       programStatus: "Ongoing",
@@ -187,12 +188,12 @@ export default function ProgramsPage() {
       minStakeAmount: "100",
       lockRequirement: "Lock until each distribution",
       funding: {
-        funded: "2,000 RUSD",
-        fundedUSD: "$2,040.00",
-        fundedCKB: "163,200 CKB",
-        expected: "2,000 RUSD",
-        expectedUSD: "$2,040.00",
-        expectedCKB: "163,200 CKB",
+        funded: "5,000 RUSD per staker",
+        fundedUSD: "$5,100.00 per staker",
+        fundedCKB: "408,000 CKB per staker",
+        expected: "5,000 RUSD per staker",
+        expectedUSD: "$5,100.00 per staker",
+        expectedCKB: "408,000 CKB per staker",
         completionPercentage: 100,
       },
       canStake: true,
@@ -201,11 +202,11 @@ export default function ProgramsPage() {
     },
     {
       id: "bank-btc-lp-001",
-      tokenName: "BANK/BTC LP-UTXOSwap",
-      tokenSymbol: "BANK/BTC",
+      tokenName: "BANK/BTC Liquidity Pool on UTXOSwap",
+      tokenSymbol: "LP-UTXOSwap (BANK/BTC)",
       tokenLogo: "https://picsum.photos/32/32?random=8",
       description:
-        "High-value liquidity provider token staking for BANK/BTC trading pair. Earn BTC rewards for providing liquidity to this premium trading pair.",
+        "Premium BANK/BTC liquidity pool earning BTC rewards.",
       balance: "0",
       balanceUSD: "$0.00",
       balanceCKB: "0 CKB",
@@ -239,7 +240,7 @@ export default function ProgramsPage() {
       tokenSymbol: "NEW",
       tokenLogo: "https://picsum.photos/32/32?random=2",
       description:
-        "Upcoming staking program for NEW token with extended 45-day periods. This program offers unlimited periods for long-term staking rewards.",
+        "NEW token staking with 45-day periods and unlimited duration.",
       balance: "0",
       balanceUSD: "$0.00",
       balanceCKB: "0 CKB",
@@ -332,42 +333,6 @@ export default function ProgramsPage() {
         expectedUSD: "$7,500.00",
         expectedCKB: "625,000 CKB",
         completionPercentage: 50,
-      },
-      canStake: false,
-      canUnstake: false,
-      stakingPortalUrl: null,
-    },
-    {
-      id: "test-staking-001",
-      tokenName: "TestToken",
-      tokenSymbol: "TEST",
-      tokenLogo: "https://picsum.photos/32/32?random=5",
-      description:
-        "Completed test staking program that ran for 120 days with proportional distribution. All rewards have been distributed and claimed.",
-      balance: "750.00",
-      balanceUSD: "$375.00",
-      balanceCKB: "93,750 CKB",
-      effectiveAverage: "698.45",
-      effectiveAverageUSD: "$349.23",
-      effectiveAverageCKB: "87,306 CKB",
-      estimatedRewards: "0",
-      estimatedAPY: "0%",
-      collectedRewards: "128.5",
-      rewardToken: "BANK",
-      programDuration: 120,
-      distributionMode: "Proportional",
-      minStakeAmount: "25",
-      lockRequirement: "Lock until final distribution only",
-      programStatus: "Ended",
-      distributionMethod: "End-Only",
-      funding: {
-        funded: "1,600 BANK",
-        fundedUSD: "$2,400.00",
-        fundedCKB: "200,000 CKB",
-        expected: "1,600 BANK",
-        expectedUSD: "$2,400.00",
-        expectedCKB: "200,000 CKB",
-        completionPercentage: 100,
       },
       canStake: false,
       canUnstake: false,
@@ -476,16 +441,16 @@ export default function ProgramsPage() {
               </Link>
               <div className="flex items-center space-x-4">
                 <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
-                  Dashboard
+                  My Stakings
                 </Link>
                 <Link href="/programs" className="text-sm text-purple-600 font-medium">
-                  Programs
-                </Link>
-                <Link href="/deploy" className="text-sm text-slate-600 hover:text-slate-900">
-                  Deploy
+                  Explore Programs
                 </Link>
                 <Link href="/configure" className="text-sm text-slate-600 hover:text-slate-900">
-                  Configure
+                  Manage Programs
+                </Link>
+                <Link href="/docs" className="text-sm text-slate-600 hover:text-slate-900">
+                  Docs
                 </Link>
               </div>
             </div>
@@ -500,7 +465,7 @@ export default function ProgramsPage() {
       {/* Header */}
       <header className="border-b bg-white">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="text-xl font-semibold">Staking Programs</h1>
+          <h1 className="text-xl font-semibold">Explore Programs</h1>
           <p className="text-sm text-slate-600 mt-1">
             Discover and participate in staking programs across different tokens
           </p>
@@ -540,9 +505,9 @@ export default function ProgramsPage() {
               <SelectContent>
                 <SelectItem value="all">All Tokens</SelectItem>
                 <SelectItem value="BANK">BANK</SelectItem>
-                <SelectItem value="BANK/CKB">BANK/CKB LP</SelectItem>
-                <SelectItem value="BANK/RUSD">BANK/RUSD LP</SelectItem>
-                <SelectItem value="BANK/BTC">BANK/BTC LP</SelectItem>
+                                            <SelectItem value="LP-UTXOSwap (BANK/CKB)">BANK/CKB LP</SelectItem>
+                            <SelectItem value="LP-UTXOSwap (BANK/RUSD)">BANK/RUSD LP</SelectItem>
+                            <SelectItem value="LP-UTXOSwap (BANK/BTC)">BANK/BTC LP</SelectItem>
                 <SelectItem value="NEW">NEW</SelectItem>
                 <SelectItem value="DEMO">DEMO</SelectItem>
                 <SelectItem value="PART">PART</SelectItem>
@@ -555,9 +520,6 @@ export default function ProgramsPage() {
         {/* Programs Grid */}
         <div className="space-y-4">
           {filteredPrograms.map((program) => {
-            const isExpanded = expandedPrograms[program.id] || false
-            const hasDifference = hasStakingDifference(program.balance, program.effectiveAverage)
-
             return (
               <Card
                 key={program.id}
@@ -597,39 +559,6 @@ export default function ProgramsPage() {
 
                         {/* Program description */}
                         <p className="text-sm text-slate-600 mb-2 line-clamp-2">{program.description}</p>
-
-                        <div className="grid grid-cols-3 gap-4 text-sm">
-                          <div>
-                            <span className="text-slate-600">Wallet: </span>
-                            <span className="font-medium">
-                              {walletBalances[program.tokenSymbol] || "0.00"} {program.tokenSymbol}
-                            </span>
-                          </div>
-                          {program.programStatus === "Ongoing" && (
-                            <>
-                              <div>
-                                <span className="text-purple-600">Staked: </span>
-                                <span className="font-medium">
-                                  {program.balance} {program.tokenSymbol}
-                                </span>
-                              </div>
-                              <div>
-                                <span className="text-green-600">APY: </span>
-                                <span className="font-medium text-green-600">{program.estimatedAPY}</span>
-                              </div>
-                            </>
-                          )}
-                        </div>
-
-                        {/* Show difference if significant */}
-                        {hasDifference && program.programStatus === "Ongoing" && (
-                          <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded text-xs">
-                            <div className="text-blue-800">
-                              <strong>Effective Average:</strong> {program.effectiveAverage} {program.tokenSymbol}
-                            </div>
-                            <div className="text-blue-600">Rewards calculated on effective average for this period</div>
-                          </div>
-                        )}
                       </div>
                     </div>
 
@@ -646,32 +575,117 @@ export default function ProgramsPage() {
                 </CardHeader>
 
                 <CardContent className="pt-0">
-                  <div className="grid grid-cols-4 gap-3 mb-3 p-2 bg-slate-50/50 rounded-lg">
-                    <div className="text-center">
-                      <div className="text-xs text-slate-500">Min Stake</div>
-                      <div className="text-sm font-medium">
-                        {program.minStakeAmount} {program.tokenSymbol}
+                  {/* Program Info - styled like dashboard */}
+                  <div className="p-3 bg-slate-50/50 rounded-lg border space-y-3 mb-4">
+                    {/* First row: Distribution, Rewards, Total Rewards, Periods Remaining (4 items) */}
+                    <div className="grid grid-cols-12 gap-2">
+                      <div className="col-span-3 text-center">
+                        <div className="flex items-center justify-center mb-1">
+                          <ArrowUpDown className="w-3 h-3 text-slate-500 mr-1" />
+                          <div className="text-xs text-slate-500">Distribution Mode</div>
+                        </div>
+                        <div className="text-sm font-medium">
+                          {program.distributionMethod} - {program.distributionMode}
+                        </div>
+                      </div>
+                      <div className="col-span-3 text-center">
+                        <div className="flex items-center justify-center mb-1">
+                          <Gift className="w-3 h-3 text-slate-500 mr-1" />
+                          <div className="text-xs text-slate-500">Rewards</div>
+                        </div>
+                        <div className="text-sm font-medium text-purple-600">{program.rewardToken}</div>
+                      </div>
+                      <div className="col-span-3 text-center">
+                        <div className="flex items-center justify-center mb-1">
+                          <TrendingUp className="w-3 h-3 text-slate-500 mr-1" />
+                          <div className="text-xs text-slate-500">Total Rewards</div>
+                        </div>
+                        <div className="text-sm font-medium text-green-600">
+                          {program.funding.funded}
+                          {program.distributionMode === "Even" && program.rewardType === "individual" && " (per staker)"}
+                        </div>
+                      </div>
+                      <div className="col-span-3 text-center">
+                        <div className="flex items-center justify-center mb-1">
+                          <Clock className="w-3 h-3 text-slate-500 mr-1" />
+                          <div className="text-xs text-slate-500">Distribution Schedule</div>
+                        </div>
+                        <div className="text-sm font-medium">
+                          {program.distributionMethod === "Periodic" && program.totalPeriods
+                            ? `${program.totalPeriods} periods`
+                            : program.distributionMethod === "Periodic" ? "Unlimited"
+                            : "Single Payout"}
+                        </div>
                       </div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-xs text-slate-500">Distribution</div>
-                      <div className="text-sm font-medium">{program.distributionMode}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xs text-slate-500">Rewards</div>
-                      <div className="text-sm font-medium text-purple-600">{program.rewardToken}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xs text-slate-500">
-                        {program.distributionMethod === "Periodic" ? "Period" : "Duration"}
+                    
+                    {/* Second row: Minimum Stake, Lock Requirement, Period Duration, APY (4 items) */}
+                    <div className="grid grid-cols-12 gap-2">
+                      <div className="col-span-3 text-center">
+                        <div className="flex items-center justify-center mb-1">
+                          <Coins className="w-3 h-3 text-slate-500 mr-1" />
+                          <div className="text-xs text-slate-500">Minimum Stake</div>
+                        </div>
+                        <div className="text-sm font-medium">
+                          {program.minStakeAmount} {program.tokenSymbol}
+                        </div>
                       </div>
-                      <div className="text-sm font-medium">
-                        {program.distributionMethod === "Periodic"
-                          ? `${program.periodDuration}d`
-                          : `${program.programDuration}d`}
+                      <div className="col-span-3 text-center">
+                        <div className="flex items-center justify-center mb-1">
+                          <Lock className="w-3 h-3 text-slate-500 mr-1" />
+                          <div className="text-xs text-slate-500">Lock Requirement</div>
+                        </div>
+                        <div className="text-sm font-medium">{program.lockRequirement}</div>
+                      </div>
+                      <div className="col-span-3 text-center">
+                        <div className="flex items-center justify-center mb-1">
+                          <Calendar className="w-3 h-3 text-slate-500 mr-1" />
+                          <div className="text-xs text-slate-500">
+                            {program.distributionMethod === "Periodic" ? "Period Duration" : "Total Duration"}
+                          </div>
+                        </div>
+                        <div className="text-sm font-medium">
+                          {program.distributionMethod === "Periodic"
+                            ? `${program.periodDuration} days`
+                            : `${program.programDuration} days`}
+                        </div>
+                      </div>
+                      <div className="col-span-3 text-center">
+                        <div className="flex items-center justify-center mb-1">
+                          <Camera className="w-3 h-3 text-slate-500 mr-1" />
+                          <div className="text-xs text-slate-500">APY</div>
+                        </div>
+                        <div className="text-sm font-medium text-green-600">{program.estimatedAPY || "0%"}</div>
                       </div>
                     </div>
                   </div>
+
+                  {/* Status-specific notifications */}
+                  {program.programStatus === "Preview" && (
+                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                      <div className="text-sm font-medium text-blue-800 mb-1">Preview Mode</div>
+                      <div className="text-xs text-blue-700">Configuration pending. Staking available once locked and funded.</div>
+                    </div>
+                  )}
+                  
+                  {program.programStatus === "Configured" && (
+                    <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                      <div className="text-sm font-medium text-orange-800 mb-1">Awaiting Funding</div>
+                      <div className="text-xs text-orange-700">
+                        Configuration locked. Needs{" "}
+                        {program.funding.completionPercentage === 0 ? "funding" : "full funding"} to start.
+                      </div>
+                    </div>
+                  )}
+
+                  {program.programStatus === "Ended" && (
+                    <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                      <div className="text-sm font-medium text-slate-800 mb-1">Program Completed</div>
+                      <div className="text-xs text-slate-700">
+                        All rewards distributed. Final APY: {program.estimatedAPY || "12.5%"}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Period Progress for Ongoing Periodic Programs - Always Visible */}
                   {program.programStatus === "Ongoing" && program.distributionMethod === "Periodic" && (
@@ -713,104 +727,74 @@ export default function ProgramsPage() {
                     </div>
                   )}
 
-                  <Collapsible open={isExpanded} onOpenChange={() => toggleExpand(program.id)}>
-                    <CollapsibleTrigger asChild>
-                      <Button variant="ghost" size="sm" className="w-full justify-between p-2 h-8 text-xs">
-                        <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
-                        <ChevronDown
-                          className={`w-3 h-3 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
-                        />
-                      </Button>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="space-y-3 mt-3">
-                      {/* Same detailed content as dashboard but more compact */}
-                      <div className="grid md:grid-cols-2 gap-4 p-3 bg-white rounded-lg border">
-                        <div>
-                          <div className="text-sm font-medium text-slate-600 mb-2">Funding Status</div>
-                          <div className="space-y-1">
-                            <div className="text-sm">
-                              <span className="font-medium">
-                                {program.funding.funded} / {program.funding.expected}
-                              </span>
-                              <span className="text-slate-500 ml-2">({program.funding.completionPercentage}%)</span>
-                            </div>
-                            <div className="text-xs text-slate-500">
-                              {program.funding.fundedUSD} / {program.funding.expectedUSD}
-                            </div>
-                            {program.funding.completionPercentage === 0 && (
-                              <div className="text-xs text-red-600 flex items-center">
-                                <AlertTriangle className="w-3 h-3 mr-1" />
-                                Needs funding
-                              </div>
-                            )}
-                            {program.funding.completionPercentage === 100 && (
-                              <div className="text-xs text-green-600 flex items-center">
-                                <CheckCircle className="w-3 h-3 mr-1" />
-                                Fully funded
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium text-slate-600 mb-2">Program Config</div>
-                          <div className="space-y-1 text-xs text-slate-600">
-                            <div>Lock: {program.lockRequirement}</div>
-                            <div>Method: {program.distributionMethod}</div>
-                            {program.distributionMethod === "Periodic" ? (
-                              <div>
-                                Every {program.periodDuration} days
-                                {program.totalPeriods && ` (${program.totalPeriods} periods)`}
-                              </div>
-                            ) : (
-                              <div>After {program.programDuration} days</div>
-                            )}
-                          </div>
-                        </div>
+                  {/* Funding Status - always visible */}
+                  <div className="mb-4 p-3 bg-white rounded-lg border">
+                    <div className="text-sm font-medium text-slate-600 mb-2">Funding Status</div>
+                    <div className="space-y-1">
+                      <div className="text-sm">
+                        <span className="font-medium">
+                          {program.funding.funded} / {program.funding.expected}
+                        </span>
+                        <span className="text-slate-500 ml-2">({program.funding.completionPercentage}%)</span>
                       </div>
-
-                      {/* Snapshot Information for Ongoing Programs */}
-                      {program.programStatus === "Ongoing" && (
-                        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                          <div className="text-sm font-medium text-green-800 mb-1">Snapshot Status</div>
-                          <div className="text-xs text-green-700 space-y-1">
-                            <div>Last snapshot: {program.lastSnapshot}</div>
-                            <div>Next snapshot: in {program.nextSnapshot}</div>
-                            <div>Status: Healthy • Daily snapshots active</div>
-                          </div>
+                      <div className="text-xs text-slate-500">
+                        {program.funding.fundedUSD} / {program.funding.expectedUSD}
+                      </div>
+                      {program.funding.completionPercentage === 0 && (
+                        <div className="text-xs text-red-600 flex items-center">
+                          <AlertTriangle className="w-3 h-3 mr-1" />
+                          Needs funding
                         </div>
                       )}
-                    </CollapsibleContent>
-                  </Collapsible>
+                      {program.funding.completionPercentage === 100 && (
+                        <div className="text-xs text-green-600 flex items-center">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          Fully funded
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
                   <div className="flex items-center justify-between pt-3 border-t mt-3">
                     <div className="text-xs text-slate-500">
-                      {program.programStatus === "Preview" ? (
+                      {program.programStatus === "Ongoing" ? (
+                        <>Last snapshot: {program.lastSnapshot} • Next: in {program.nextSnapshot}</>
+                      ) : program.programStatus === "Preview" ? (
                         <>Waiting for configuration</>
                       ) : program.programStatus === "Configured" ? (
                         <>Ready • Needs {program.funding.completionPercentage === 0 ? "funding" : "full funding"}</>
-                      ) : program.programStatus === "Ongoing" ? (
-                        <>Live • Earning rewards</>
                       ) : (
-                        <>Completed</>
+                        <>Program completed</>
                       )}
                     </div>
                     <div className="flex items-center space-x-2">
                       {program.programStatus === "Ongoing" && (
                         <>
-                          {program.canStake && (
-                            <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs bg-transparent">
+                          {program.canStake && program.stakingPortalUrl && (
+                            <Button
+                              asChild
+                              className="h-8 px-3 text-xs bg-green-600 hover:bg-green-700 text-white border-0 shadow-sm"
+                            >
                               <Link href={program.stakingPortalUrl}>
                                 <Coins className="w-3 h-3 mr-1" />
-                                Stake
+                                {program.tokenSymbol.includes('LP') ? (
+                                  <span>
+                                    Stake (Available: {walletBalances.BANK} BANK, {walletBalances.CKB || "0"} CKB)
+                                  </span>
+                                ) : (
+                                  <span>
+                                    Stake (Available: {walletBalances[program.tokenSymbol as keyof typeof walletBalances] || "0"} {program.tokenSymbol})
+                                  </span>
+                                )}
                               </Link>
                             </Button>
                           )}
-                          {program.canUnstake && (
+                          {program.canUnstake && program.stakingPortalUrl && (
                             <Button
                               variant="outline"
-                              size="sm"
+                              size="default"
                               asChild
-                              className="h-7 px-2 text-xs text-red-600 border-red-600 bg-transparent"
+                              className="h-8 px-3 text-xs text-red-600 border-red-600 bg-transparent"
                             >
                               <Link href={`${program.stakingPortalUrl}?action=unstake`}>
                                 <ArrowDownRight className="w-3 h-3 mr-1" />
@@ -820,7 +804,7 @@ export default function ProgramsPage() {
                           )}
                         </>
                       )}
-                      <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs bg-transparent">
+                      <Button variant="outline" size="default" asChild className="h-8 px-3 text-xs bg-transparent">
                         <Link href={`/program/${program.id}`}>Details</Link>
                       </Button>
                     </div>

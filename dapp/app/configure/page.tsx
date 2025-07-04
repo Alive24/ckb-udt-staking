@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Shield, Users, Clock, CheckCircle, AlertTriangle, Key, Lock, Settings } from "lucide-react"
+import { Shield, Users, Clock, CheckCircle, AlertTriangle, Key, Lock, Settings, Coins } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -40,16 +40,16 @@ export default function ConfigurePage() {
               </Link>
               <div className="flex items-center space-x-4">
                 <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
-                  Dashboard
+                  My Stakings
                 </Link>
                 <Link href="/programs" className="text-sm text-slate-600 hover:text-slate-900">
-                  Programs
-                </Link>
-                <Link href="/deploy" className="text-sm text-slate-600 hover:text-slate-900">
-                  Deploy
+                  Explore Programs
                 </Link>
                 <Link href="/configure" className="text-sm text-purple-600 font-medium">
-                  Configure
+                  Manage Programs
+                </Link>
+                <Link href="/docs" className="text-sm text-slate-600 hover:text-slate-900">
+                  Docs
                 </Link>
               </div>
             </div>
@@ -64,9 +64,9 @@ export default function ConfigurePage() {
       {/* Header */}
       <header className="border-b bg-white">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="text-xl font-semibold">Configuration Management</h1>
+          <h1 className="text-xl font-semibold">Manage Programs</h1>
           <p className="text-sm text-slate-600 mt-1">
-            Manage multi-signature configurations and time-locked parameters
+            Deploy new programs and manage multi-signature configurations
           </p>
         </div>
       </header>
@@ -74,8 +74,9 @@ export default function ConfigurePage() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <Tabs defaultValue="active" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="active">Active Configurations</TabsTrigger>
-            <TabsTrigger value="contribute">Contribute</TabsTrigger>
+            <TabsTrigger value="active">Active Programs</TabsTrigger>
+            <TabsTrigger value="deploy">Deploy Program</TabsTrigger>
+            <TabsTrigger value="multisig">Multisig Program</TabsTrigger>
             <TabsTrigger value="history">Configuration History</TabsTrigger>
           </TabsList>
 
@@ -90,7 +91,7 @@ export default function ConfigurePage() {
                           <span>{config.tokenName}</span>
                           <Badge variant="secondary">{config.tokenSymbol}</Badge>
                         </CardTitle>
-                        <CardDescription>Multi-signature configuration in progress</CardDescription>
+                        <CardDescription>Configuration Period of Program</CardDescription>
                       </div>
                       <Badge variant="outline" className="text-orange-600 border-orange-600">
                         {config.status}
@@ -108,6 +109,46 @@ export default function ConfigurePage() {
                         <span className="text-sm text-slate-600">{config.timeRemaining} remaining</span>
                       </div>
                       <Progress value={config.progress} className="h-2" />
+                    </div>
+
+                    {/* Funding Interface */}
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <h4 className="font-medium mb-3 flex items-center">
+                        <Coins className="w-4 h-4 mr-1" />
+                        Program Funding
+                      </h4>
+                      <div className="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <Label htmlFor="fund-amount" className="text-sm font-medium">
+                            Funding Amount
+                          </Label>
+                          <Input
+                            id="fund-amount"
+                            type="number"
+                            placeholder="Enter amount"
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="fund-token" className="text-sm font-medium">
+                            Token
+                          </Label>
+                          <Input
+                            id="fund-token"
+                            value={config.tokenSymbol}
+                            disabled
+                            className="mt-1"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                          Add Funding
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          View Funding History
+                        </Button>
+                      </div>
                     </div>
 
                     {/* Signature Status */}
@@ -176,81 +217,53 @@ export default function ConfigurePage() {
             </Alert>
           </TabsContent>
 
-          <TabsContent value="contribute" className="space-y-6">
+          <TabsContent value="deploy" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Contribute to Configuration</CardTitle>
-                <CardDescription>Add your signature to validate configuration parameters</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <Label htmlFor="configId">Configuration ID</Label>
-                  <Input id="configId" placeholder="Enter configuration ID to contribute to" className="mt-1" />
-                </div>
-
-                <div>
-                  <Label htmlFor="publicKey">Your Public Key</Label>
-                  <Input id="publicKey" placeholder="0x..." className="mt-1" />
-                </div>
-
-                <div>
-                  <Label htmlFor="signature">Configuration Signature</Label>
-                  <Textarea
-                    id="signature"
-                    placeholder="Paste your signature for the configuration parameters..."
-                    className="mt-1"
-                    rows={4}
-                  />
-                </div>
-
-                <Alert>
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertDescription>
-                    Carefully review all configuration parameters before signing. Your signature helps validate the
-                    decentralized setup process.
-                  </AlertDescription>
-                </Alert>
-
-                <Button className="w-full">
-                  <Shield className="w-4 h-4 mr-2" />
-                  Submit Signature
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Configuration Validation</CardTitle>
-                <CardDescription>Verify configuration parameters before contributing</CardDescription>
+                <CardTitle>Deploy New Staking Program</CardTitle>
+                <CardDescription>
+                  Create and deploy a new staking reward program for your UDT token
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-slate-50 rounded-lg">
-                    <h4 className="font-medium mb-2">Parameter Summary</h4>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-slate-600">Token:</span>
-                        <span className="ml-2 font-medium">MyToken (MTK)</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-600">Reward Type:</span>
-                        <span className="ml-2 font-medium">Possession-Based</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-600">Period Duration:</span>
-                        <span className="ml-2 font-medium">30 Days</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-600">Required Signatures:</span>
-                        <span className="ml-2 font-medium">3 of 5</span>
-                      </div>
-                    </div>
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-8 h-8 text-white" />
                   </div>
-
-                  <Button variant="outline" className="w-full bg-transparent">
-                    <Settings className="w-4 h-4 mr-2" />
-                    View Full Configuration
+                  <h3 className="text-xl font-semibold mb-2">Ready to Deploy?</h3>
+                  <p className="text-slate-600 mb-6">
+                    Launch the deployment wizard to configure your staking reward program
+                  </p>
+                  <Button size="lg" asChild>
+                    <Link href="/deploy">
+                      Start Deployment Wizard
+                    </Link>
                   </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="multisig" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Multisig Program</CardTitle>
+                <CardDescription>
+                  Multi-signature program management features
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-gradient-to-br from-slate-400 to-slate-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Coming Soon</h3>
+                  <p className="text-slate-600 mb-6">
+                    Multi-signature program management features will be available in a future update
+                  </p>
+                  <Badge variant="outline" className="text-slate-600 border-slate-400">
+                    Feature in Development
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -260,41 +273,16 @@ export default function ConfigurePage() {
             <Card>
               <CardHeader>
                 <CardTitle>Configuration History</CardTitle>
-                <CardDescription>View completed and finalized configurations</CardDescription>
+                <CardDescription>
+                  View past configurations and their current status
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Lock className="w-5 h-5 text-green-600" />
-                      <div>
-                        <div className="font-medium">DemoToken (DEMO)</div>
-                        <div className="text-sm text-slate-500">Finalized on 2024-01-15</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <Badge variant="outline" className="text-green-600 border-green-600">
-                        Immutable
-                      </Badge>
-                      <div className="text-sm text-slate-500 mt-1">5/5 signatures</div>
-                    </div>
+                <div className="text-center py-8">
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Settings className="w-6 h-6 text-slate-400" />
                   </div>
-
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Lock className="w-5 h-5 text-green-600" />
-                      <div>
-                        <div className="font-medium">TestToken (TEST)</div>
-                        <div className="text-sm text-slate-500">Finalized on 2024-01-01</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <Badge variant="outline" className="text-green-600 border-green-600">
-                        Immutable
-                      </Badge>
-                      <div className="text-sm text-slate-500 mt-1">3/3 signatures</div>
-                    </div>
-                  </div>
+                  <p className="text-slate-600">No configuration history available</p>
                 </div>
               </CardContent>
             </Card>

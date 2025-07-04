@@ -33,8 +33,8 @@ export default function StakingPortalPage({
   // Mock program data
   const program = {
     id: params.programId,
-    tokenName: "BANK/CKB LP-UTXOSwap",
-    tokenSymbol: "BANK/CKB",
+          tokenName: "BANK/CKB Liquidity Pool on UTXOSwap",
+          tokenSymbol: "LP-UTXOSwap (BANK/CKB)",
     tokenLogo: "https://picsum.photos/48/48?random=1",
     currentBalance: "1,250.00",
     availableBalance: "2,500.00",

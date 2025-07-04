@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowLeft, ArrowRight, Check, Clock, Shield, Users, Settings } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Clock, Shield, Users, Settings, Coins, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -53,16 +53,16 @@ export default function DeployPage() {
               </Link>
               <div className="flex items-center space-x-4">
                 <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
-                  Dashboard
+                  My Stakings
                 </Link>
                 <Link href="/programs" className="text-sm text-slate-600 hover:text-slate-900">
-                  Programs
-                </Link>
-                <Link href="/deploy" className="text-sm text-purple-600 font-medium">
-                  Deploy
+                  Explore Programs
                 </Link>
                 <Link href="/configure" className="text-sm text-slate-600 hover:text-slate-900">
-                  Configure
+                  Manage Programs
+                </Link>
+                <Link href="/docs" className="text-sm text-slate-600 hover:text-slate-900">
+                  Docs
                 </Link>
               </div>
             </div>
@@ -153,7 +153,7 @@ export default function DeployPage() {
                       <SelectContent>
                         <SelectItem value="regular">Regular Token (e.g., BANK)</SelectItem>
                         <SelectItem value="lp">
-                          LP Token (e.g., BANK/CKB LP-UTXOSwap, BANK/RUSD LP-UTXOSwap, BANK/BTC LP-UTXOSwap)
+                          LP Token (e.g., BANK/CKB Liquidity Pool on UTXOSwap, BANK/RUSD Liquidity Pool on UTXOSwap, BANK/BTC Liquidity Pool on UTXOSwap)
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -590,11 +590,114 @@ export default function DeployPage() {
                   </div>
                 </div>
 
+                {/* Initial Funding Section */}
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h4 className="font-medium mb-3 flex items-center">
+                    <Coins className="w-4 h-4 mr-1" />
+                    Initial Funding (Optional)
+                  </h4>
+                  <p className="text-sm text-blue-800 mb-4">
+                    Fund at least some reward tokens in the same transaction as deployment. This enables immediate staking participation.
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <Label htmlFor="initial-funding" className="text-sm font-medium">
+                        Initial Funding Amount
+                      </Label>
+                      <Input
+                        id="initial-funding"
+                        type="number"
+                        placeholder="e.g., 10000 (reward tokens)"
+                        className="mt-1"
+                      />
+                      <p className="text-xs text-slate-500 mt-1">
+                        Minimum recommended: 3 periods worth of rewards
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium">
+                        Coverage Analysis
+                      </Label>
+                      <div className="mt-1 p-2 bg-white rounded border text-sm">
+                        <div className="flex justify-between">
+                          <span>Covers:</span>
+                          <span className="text-green-600">~3.2 periods</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Duration:</span>
+                          <span className="text-green-600">~96 days</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="enable-funding" />
+                    <Label htmlFor="enable-funding" className="text-sm">
+                      Include funding in deployment transaction
+                    </Label>
+                  </div>
+                </div>
+
+                {/* Configuration Locking Section */}
+                <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                  <h4 className="font-medium mb-3 flex items-center">
+                    <Lock className="w-4 h-4 mr-1" />
+                    Configuration Locking
+                  </h4>
+                  <p className="text-sm text-purple-800 mb-4">
+                    Programs with sufficient funding (3+ periods) can start immediately by locking configuration on deployment.
+                  </p>
+
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium">Configuration Lock Strategy</Label>
+                      <RadioGroup defaultValue="flexible" className="mt-2">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="flexible" id="flexible" />
+                          <Label htmlFor="flexible" className="text-sm">
+                            Flexible - Lock configuration later through management interface
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="immediate" id="immediate" />
+                          <Label htmlFor="immediate" className="text-sm">
+                            Immediate - Lock configuration on deployment (requires 3+ periods funding)
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="scheduled" id="scheduled" />
+                          <Label htmlFor="scheduled" className="text-sm">
+                            Scheduled - Lock configuration at specified time
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+
+                    <div className="p-3 bg-white rounded border">
+                      <div className="text-sm space-y-1">
+                        <div className="flex justify-between">
+                          <span className="text-slate-600">Expected Lock Time:</span>
+                          <span className="font-medium">December 15, 2024 at 2:00 PM UTC</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-600">Program Start:</span>
+                          <span className="font-medium">December 16, 2024 at 12:00 AM UTC</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-600">First Snapshot:</span>
+                          <span className="font-medium">December 17, 2024 at 12:00 AM UTC</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                   <h4 className="font-medium text-green-900 mb-2">Ready for Deployment</h4>
                   <p className="text-sm text-green-800">
-                    Your staking program is configured and ready to deploy. After deployment, you'll have the option to
-                    set up automation immediately or configure it later.
+                    Your staking program is configured and ready to deploy. Initial funding and configuration locking options are available.
                   </p>
                 </div>
 
@@ -607,10 +710,9 @@ export default function DeployPage() {
                 </div>
 
                 <div className="flex items-start space-x-3">
-                  <Checkbox id="funding" />
-                  <Label htmlFor="funding" className="text-sm leading-relaxed">
-                    I will fund the program with the specified reward token amounts after deployment to activate
-                    staking.
+                  <Checkbox id="funding-responsibility" />
+                  <Label htmlFor="funding-responsibility" className="text-sm leading-relaxed">
+                    I understand that adequate funding is required to activate staking, and locked configurations cannot be changed.
                   </Label>
                 </div>
               </div>

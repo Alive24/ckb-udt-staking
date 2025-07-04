@@ -15,6 +15,11 @@ import {
   ChevronDown,
   RefreshCw,
   HelpCircle,
+  ArrowUpDown,
+  Clock,
+  Calendar,
+  Camera,
+  PauseCircle,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -39,9 +44,10 @@ export default function DashboardPage() {
   // Mock wallet balances
   const walletBalances = {
     BANK: "5,420.50",
-    "BANK/CKB": "1,250.00",
-    "BANK/RUSD": "2,100.00",
-    "BANK/BTC": "850.00",
+    CKB: "125,000.00",
+    "LP-UTXOSwap (BANK/CKB)": "1,250.00",
+    "LP-UTXOSwap (BANK/RUSD)": "2,100.00",
+    "LP-UTXOSwap (BANK/BTC)": "850.00",
     NEW: "10,000.00",
     DEMO: "3,500.00",
     TEST: "1,200.00",
@@ -56,7 +62,7 @@ export default function DashboardPage() {
       tokenSymbol: "BANK",
       tokenLogo: "https://picsum.photos/32/32?random=1",
       description:
-        "BANK token staking rewards program with monthly distribution periods using even distribution. Stake your BANK tokens to earn rewards every 30 days.",
+        "BANK staking with 30-day periods and even distribution.",
       balance: "1,250.00", // Current staked amount
       balanceUSD: "$1,875.00", // 1,250 * $1.50
       balanceCKB: "156,250 CKB", // 1,250 * 125 CKB
@@ -72,10 +78,11 @@ export default function DashboardPage() {
       periodStartDate: "2024-01-15",
       periodEndDate: "2024-02-15",
       daysRemaining: 11,
-      estimatedRewards: "45.2", // Current period only
+      estimatedRewards: "1,250.0", // Current period only
       estimatedAPY: "18.5%", // Calculated APY
-      collectedRewards: "80.6", // From previous periods (42.1 + 38.5)
+      collectedRewards: "2,480.0", // From previous periods
       rewardToken: "BANK",
+      rewardType: "shared", // shared pool vs individual
       lastSnapshot: "2 hours ago",
       nextSnapshot: "22 hours",
       lastTriggerTime: "2024-02-10 00:00:15 UTC",
@@ -89,22 +96,22 @@ export default function DashboardPage() {
       lockRequirement: "Lock until each distribution",
       // Funding for current period
       funding: {
-        funded: "1,000 BANK",
-        fundedUSD: "$1,500.00",
-        fundedCKB: "125,000 CKB",
-        expected: "1,000 BANK",
-        expectedUSD: "$1,500.00",
-        expectedCKB: "125,000 CKB",
+        funded: "4,167 BANK",
+        fundedUSD: "$6,250.50",
+        fundedCKB: "520,875 CKB",
+        expected: "4,167 BANK",
+        expectedUSD: "$6,250.50",
+        expectedCKB: "520,875 CKB",
         completionPercentage: 100,
       },
-      // Total program funding for limited programs
+      // Total program funding for limited programs (shared pool)
       totalProgramFunding: {
-        funded: "8,000 BANK",
-        fundedUSD: "$12,000.00",
-        fundedCKB: "1,000,000 CKB",
-        expected: "12,000 BANK",
-        expectedUSD: "$18,000.00",
-        expectedCKB: "1,500,000 CKB",
+        funded: "33,336 BANK",
+        fundedUSD: "$50,004.00",
+        fundedCKB: "4,167,000 CKB",
+        expected: "50,000 BANK",
+        expectedUSD: "$75,000.00",
+        expectedCKB: "6,250,000 CKB",
         completionPercentage: 67,
       },
       canStake: true,
@@ -114,11 +121,11 @@ export default function DashboardPage() {
     },
     {
       id: "bank-ckb-lp-001",
-      tokenName: "BANK/CKB LP-UTXOSwap",
-      tokenSymbol: "BANK/CKB",
+      tokenName: "BANK/CKB Liquidity Pool on UTXOSwap",
+      tokenSymbol: "LP-UTXOSwap (BANK/CKB)",
       tokenLogo: "https://picsum.photos/32/32?random=6",
       description:
-        "Liquidity provider token staking for BANK/CKB trading pair on UTXOSwap. Earn BANK rewards for providing liquidity to the decentralized exchange.",
+        "Earn BANK rewards by providing BANK/CKB liquidity on UTXOSwap DEX.",
       balance: "850.00",
       balanceUSD: "$2,125.00", // LP tokens worth more
       balanceCKB: "170,000 CKB",
@@ -134,10 +141,11 @@ export default function DashboardPage() {
       periodStartDate: "2024-02-01",
       periodEndDate: "2024-02-15",
       daysRemaining: 8,
-      estimatedRewards: "32.1",
+      estimatedRewards: "178.6",
       estimatedAPY: "22.3%",
-      collectedRewards: "28.4",
+      collectedRewards: "164.3",
       rewardToken: "BANK",
+      rewardType: "shared", // shared pool for proportional
       lastSnapshot: "1 day ago",
       nextSnapshot: "1 day",
       lastTriggerTime: "2024-02-09 00:00:12 UTC",
@@ -149,21 +157,21 @@ export default function DashboardPage() {
       minStakeAmount: "50",
       lockRequirement: "No time lock",
       funding: {
-        funded: "500 BANK",
-        fundedUSD: "$750.00",
-        fundedCKB: "62,500 CKB",
-        expected: "500 BANK",
-        expectedUSD: "$750.00",
-        expectedCKB: "62,500 CKB",
+        funded: "42,500 BANK",
+        fundedUSD: "$63,750.00",
+        fundedCKB: "5,312,500 CKB",
+        expected: "42,500 BANK",
+        expectedUSD: "$63,750.00",
+        expectedCKB: "5,312,500 CKB",
         completionPercentage: 100,
       },
       totalProgramFunding: {
-        funded: "8,500 BANK",
-        fundedUSD: "$12,750.00",
-        fundedCKB: "1,062,500 CKB",
-        expected: "12,000 BANK",
-        expectedUSD: "$18,000.00",
-        expectedCKB: "1,500,000 CKB",
+        funded: "42,500 BANK",
+        fundedUSD: "$63,750.00",
+        fundedCKB: "5,312,500 CKB",
+        expected: "60,000 BANK",
+        expectedUSD: "$90,000.00",
+        expectedCKB: "7,500,000 CKB",
         completionPercentage: 71,
       },
       canStake: true,
@@ -173,11 +181,11 @@ export default function DashboardPage() {
     },
     {
       id: "bank-rusd-lp-001",
-      tokenName: "BANK/RUSD LP-UTXOSwap",
-      tokenSymbol: "BANK/RUSD",
+      tokenName: "BANK/RUSD Liquidity Pool on UTXOSwap",
+      tokenSymbol: "LP-UTXOSwap (BANK/RUSD)",
       tokenLogo: "https://picsum.photos/32/32?random=7",
       description:
-        "Liquidity provider token staking for BANK/RUSD stable pair. Earn RUSD rewards for providing liquidity to this stable trading pair with lower volatility.",
+        "Earn RUSD rewards providing stable BANK/RUSD liquidity.",
       balance: "1,200.00",
       balanceUSD: "$3,000.00",
       balanceCKB: "240,000 CKB",
@@ -193,10 +201,11 @@ export default function DashboardPage() {
       periodStartDate: "2024-02-01",
       periodEndDate: "2024-02-22",
       daysRemaining: 15,
-      estimatedRewards: "85.7",
+      estimatedRewards: "4,762.0",
       estimatedAPY: "15.8%",
       collectedRewards: "0",
       rewardToken: "RUSD",
+      rewardType: "individual", // per staker for even distribution
       lastSnapshot: "3 hours ago",
       nextSnapshot: "21 hours",
       lastTriggerTime: "2024-02-10 03:00:08 UTC",
@@ -208,12 +217,12 @@ export default function DashboardPage() {
       minStakeAmount: "100",
       lockRequirement: "Lock until each distribution",
       funding: {
-        funded: "2,000 RUSD",
-        fundedUSD: "$2,040.00", // RUSD slightly above $1
-        fundedCKB: "163,200 CKB",
-        expected: "2,000 RUSD",
-        expectedUSD: "$2,040.00",
-        expectedCKB: "163,200 CKB",
+        funded: "5,000 RUSD per staker",
+        fundedUSD: "$5,100.00 per staker",
+        fundedCKB: "408,000 CKB per staker",
+        expected: "5,000 RUSD per staker",
+        expectedUSD: "$5,100.00 per staker",
+        expectedCKB: "408,000 CKB per staker",
         completionPercentage: 100,
       },
       canStake: true,
@@ -222,203 +231,114 @@ export default function DashboardPage() {
       isExternalStaking: false,
     },
     {
-      id: "bank-btc-lp-001",
-      tokenName: "BANK/BTC LP-UTXOSwap",
-      tokenSymbol: "BANK/BTC",
-      tokenLogo: "https://picsum.photos/32/32?random=8",
-      description:
-        "High-value liquidity provider token staking for BANK/BTC trading pair. Earn BTC rewards for providing liquidity to this premium trading pair.",
-      balance: "0",
-      balanceUSD: "$0.00",
-      balanceCKB: "0 CKB",
-      effectiveAverage: "0",
-      effectiveAverageUSD: "$0.00",
-      effectiveAverageCKB: "0 CKB",
-      estimatedRewards: "0",
-      estimatedAPY: "0%",
-      rewardToken: "BTC",
-      periodDuration: 7,
-      totalPeriods: 52,
-      programStatus: "Preview",
-      distributionMethod: "Periodic",
-      distributionMode: "Proportional",
-      minStakeAmount: "25",
-      lockRequirement: "Lock until each snapshot",
-      funding: {
-        funded: "0 BTC",
-        fundedUSD: "$0.00",
-        fundedCKB: "0 CKB",
-        expected: "0.1 BTC",
-        expectedUSD: "$4,500.00",
-        expectedCKB: "360,000 CKB",
-        completionPercentage: 0,
-      },
-      canStake: false,
-      canUnstake: false,
-      stakingPortalUrl: null,
-      isExternalStaking: false,
-    },
-    // PREVIEW PROGRAMS SECOND
-    {
-      id: "new-staking-001",
-      tokenName: "NewToken",
-      tokenSymbol: "NEW",
-      tokenLogo: "https://picsum.photos/32/32?random=2",
-      description:
-        "Upcoming staking program for NEW token with extended 45-day periods. This program offers unlimited periods for long-term staking rewards.",
-      balance: "0",
-      balanceUSD: "$0.00",
-      balanceCKB: "0 CKB",
-      effectiveAverage: "0",
-      effectiveAverageUSD: "$0.00",
-      effectiveAverageCKB: "0 CKB",
-      estimatedRewards: "0",
-      estimatedAPY: "0%",
-      rewardToken: "NEW",
-      periodDuration: 45, // 45 days per period
-      totalPeriods: null, // Unlimited periods
-      distributionMode: "Even",
-      minStakeAmount: "500",
-      lockRequirement: "No time lock",
-      // Program status - preview
-      programStatus: "Preview",
-      isConfigured: false,
-      isFunded: false,
-      distributionMethod: "Periodic",
-      funding: {
-        funded: "0 NEW",
-        fundedUSD: "$0.00",
-        fundedCKB: "0 CKB",
-        expected: "1,000 NEW",
-        expectedUSD: "$500.00",
-        expectedCKB: "40,000 CKB",
-        completionPercentage: 0,
-      },
-      canStake: false,
-      canUnstake: false,
-      stakingPortalUrl: null,
-      isExternalStaking: false,
-    },
-    // CONFIGURED BUT NOT FUNDED PROGRAMS
-    {
       id: "demo-staking-001",
       tokenName: "DemoToken",
       tokenSymbol: "DEMO",
-      tokenLogo: "https://picsum.photos/32/32?random=3",
+      tokenLogo: "https://picsum.photos/32/32?random=8",
       description:
-        "Demo staking program with end-only distribution after 180 days. Configuration is locked but awaiting funding to begin operations.",
-      balance: "500.00",
-      balanceUSD: "$250.00",
-      balanceCKB: "50,000 CKB",
-      effectiveAverage: "485.20",
-      effectiveAverageUSD: "$242.60",
-      effectiveAverageCKB: "48,520 CKB",
-      estimatedRewards: "0", // No rewards until funded
-      estimatedAPY: "0%",
+        "Single payout DEMO staking program with 180-day duration and final distribution.",
+      balance: "800.00",
+      balanceUSD: "$400.00",
+      balanceCKB: "80,000 CKB",
+      effectiveAverage: "800.00",
+      effectiveAverageUSD: "$400.00",
+      effectiveAverageCKB: "80,000 CKB",
+      stakingDate: "2023-08-15",
+      currentPeriod: "Final Period",
+      periodDuration: 180,
+      totalPeriods: 1,
+      remainingPeriods: 0,
+      periodProgress: 100,
+      periodStartDate: "2023-08-15",
+      periodEndDate: "2024-02-12",
+      daysRemaining: 0,
+      estimatedRewards: "960.0",
+      estimatedAPY: "24.0%",
+      collectedRewards: "960.0",
       rewardToken: "DEMO",
-      programDuration: 180, // 180 days total program
-      distributionMode: "Proportional",
-      minStakeAmount: "50",
-      lockRequirement: "Lock until final distribution only",
-      // Program status - configured but not funded
-      programStatus: "Configured",
-      isConfigured: true,
-      isFunded: false,
-      distributionMethod: "End-Only",
-      // Total program funding
-      funding: {
-        funded: "0 DEMO",
-        fundedUSD: "$0.00",
-        fundedCKB: "0 CKB",
-        expected: "5,000 DEMO",
-        expectedUSD: "$2,500.00",
-        expectedCKB: "500,000 CKB",
-        completionPercentage: 0,
-      },
-      canStake: false,
-      canUnstake: false,
-      stakingPortalUrl: null,
-      isExternalStaking: false,
-    },
-    {
-      id: "partial-staking-001",
-      tokenName: "PartialToken",
-      tokenSymbol: "PART",
-      tokenLogo: "https://picsum.photos/32/32?random=4",
-      description:
-        "Partially funded staking program with 90-day duration. Even distribution model ensures fair rewards for all participants once fully funded.",
-      balance: "300.00",
-      balanceUSD: "$450.00",
-      balanceCKB: "37,500 CKB",
-      effectiveAverage: "285.30",
-      effectiveAverageUSD: "$427.95",
-      effectiveAverageCKB: "35,662 CKB",
-      estimatedRewards: "0", // No rewards until fully funded
-      estimatedAPY: "0%",
-      rewardToken: "BANK",
-      programDuration: 90, // 90 days total program
-      distributionMode: "Even",
-      minStakeAmount: "200",
-      lockRequirement: "Lock until each snapshot",
-      // Program status - configured but partially funded (not ongoing until fully funded)
-      programStatus: "Configured",
-      isConfigured: true,
-      isFunded: false, // Still needs full funding
-      distributionMethod: "End-Only",
-      funding: {
-        funded: "2,500 BANK",
-        fundedUSD: "$3,750.00",
-        fundedCKB: "312,500 CKB",
-        expected: "5,000 BANK",
-        expectedUSD: "$7,500.00",
-        expectedCKB: "625,000 CKB",
-        completionPercentage: 50,
-      },
-      canStake: false, // Can't stake until fully funded
-      canUnstake: false,
-      stakingPortalUrl: null,
-      isExternalStaking: false,
-    },
-    {
-      id: "test-staking-001",
-      tokenName: "TestToken",
-      tokenSymbol: "TEST",
-      tokenLogo: "https://picsum.photos/32/32?random=5",
-      description:
-        "Completed test staking program that ran for 120 days with proportional distribution. All rewards have been distributed and claimed.",
-      balance: "750.00",
-      balanceUSD: "$375.00",
-      balanceCKB: "93,750 CKB",
-      effectiveAverage: "698.45", // Whole program average for end-only
-      effectiveAverageUSD: "$349.23",
-      effectiveAverageCKB: "87,306 CKB",
-      estimatedRewards: "0", // Program ended, no more estimates
-      estimatedAPY: "0%",
-      collectedRewards: "128.5", // Total rewards received from ended program
-      rewardToken: "BANK",
-      distributionReady: true,
-      programDuration: 120, // Was 120 days total
-      distributionMode: "Proportional",
-      minStakeAmount: "25",
-      lockRequirement: "Lock until final distribution only",
-      // Program status
+      rewardType: "individual",
+      lastSnapshot: "Program ended",
+      nextSnapshot: "N/A",
+      lastTriggerTime: "2024-02-12 00:00:00 UTC",
       programStatus: "Ended",
       isConfigured: true,
       isFunded: true,
       distributionMethod: "End-Only",
-      // Total program funding
+      distributionMode: "Proportional",
+      minStakeAmount: "50",
+      lockRequirement: "Lock until final distribution only",
       funding: {
-        funded: "1,600 BANK",
-        fundedUSD: "$2,400.00",
-        fundedCKB: "200,000 CKB",
-        expected: "1,600 BANK",
-        expectedUSD: "$2,400.00",
-        expectedCKB: "200,000 CKB",
+        funded: "5,000 DEMO",
+        fundedUSD: "$2,500.00",
+        fundedCKB: "500,000 CKB",
+        expected: "5,000 DEMO",
+        expectedUSD: "$2,500.00",
+        expectedCKB: "500,000 CKB",
         completionPercentage: 100,
       },
       canStake: false,
       canUnstake: false,
-      stakingPortalUrl: null,
+      stakingPortalUrl: `/stake/demo-staking-001`,
+      isExternalStaking: false,
+    },
+    {
+      id: "paused-staking-001",
+      tokenName: "PausedToken",
+      tokenSymbol: "PAUSE",
+      tokenLogo: "https://picsum.photos/32/32?random=9",
+      description:
+        "PAUSE staking program temporarily paused due to insufficient funding.",
+      balance: "500.00",
+      balanceUSD: "$250.00",
+      balanceCKB: "50,000 CKB",
+      effectiveAverage: "500.00",
+      effectiveAverageUSD: "$250.00",
+      effectiveAverageCKB: "50,000 CKB",
+      stakingDate: "2024-01-15",
+      currentPeriod: "Period 2",
+      periodDuration: 30,
+      totalPeriods: 8,
+      remainingPeriods: 6,
+      periodProgress: 60,
+      periodStartDate: "2024-02-01",
+      periodEndDate: "2024-03-02",
+      daysRemaining: 18,
+      estimatedRewards: "0",
+      estimatedAPY: "0%",
+      collectedRewards: "125.0",
+      rewardToken: "PAUSE",
+      rewardType: "shared",
+      lastSnapshot: "5 days ago",
+      nextSnapshot: "Paused",
+      lastTriggerTime: "2024-02-05 00:00:00 UTC",
+      programStatus: "Paused",
+      isConfigured: true,
+      isFunded: false,
+      distributionMethod: "Periodic",
+      distributionMode: "Even",
+      minStakeAmount: "100",
+      lockRequirement: "Lock until each distribution",
+      funding: {
+        funded: "625 PAUSE",
+        fundedUSD: "$312.50",
+        fundedCKB: "62,500 CKB",
+        expected: "2,500 PAUSE",
+        expectedUSD: "$1,250.00",
+        expectedCKB: "250,000 CKB",
+        completionPercentage: 25,
+      },
+      totalProgramFunding: {
+        funded: "2,500 PAUSE",
+        fundedUSD: "$1,250.00",
+        fundedCKB: "250,000 CKB",
+        expected: "10,000 PAUSE",
+        expectedUSD: "$5,000.00",
+        expectedCKB: "1,000,000 CKB",
+        completionPercentage: 25,
+      },
+      canStake: false,
+      canUnstake: true,
+      stakingPortalUrl: `/stake/paused-staking-001`,
       isExternalStaking: false,
     },
   ]
@@ -477,6 +397,13 @@ export default function DashboardPage() {
         return (
           <Badge variant="outline" className="text-slate-600 border-slate-600">
             Ended
+          </Badge>
+        )
+      case "Paused":
+        return (
+          <Badge className="bg-orange-600 text-white border-0">
+            <PauseCircle className="w-3 h-3 mr-1" />
+            Paused
           </Badge>
         )
       default:
@@ -544,16 +471,16 @@ export default function DashboardPage() {
               </Link>
               <div className="flex items-center space-x-4">
                 <Link href="/dashboard" className="text-sm text-purple-600 font-medium">
-                  Dashboard
+                  My Stakings
                 </Link>
                 <Link href="/programs" className="text-sm text-slate-600 hover:text-slate-900">
-                  Programs
-                </Link>
-                <Link href="/deploy" className="text-sm text-slate-600 hover:text-slate-900">
-                  Deploy
+                  Explore Programs
                 </Link>
                 <Link href="/configure" className="text-sm text-slate-600 hover:text-slate-900">
-                  Configure
+                  Manage Programs
+                </Link>
+                <Link href="/docs" className="text-sm text-slate-600 hover:text-slate-900">
+                  Docs
                 </Link>
               </div>
             </div>
@@ -567,24 +494,11 @@ export default function DashboardPage() {
 
       {/* Header */}
       <header className="border-b bg-white">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Staking Dashboard</h1>
-          <div className="flex items-center space-x-4">
-            {!isConnected ? (
-              <Button onClick={() => setIsConnected(true)}>
-                <Wallet className="w-4 h-4 mr-2" />
-                Connect Wallet
-              </Button>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-slate-600">ckb1...abc123</span>
-                <Button variant="outline" size="sm">
-                  <Settings className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
-          </div>
+        <div className="container mx-auto px-4 py-4">
+          <h1 className="text-xl font-semibold">My Stakings</h1>
+          <p className="text-sm text-slate-600 mt-1">
+            View and manage your staking positions and rewards
+          </p>
         </div>
       </header>
 
@@ -602,13 +516,14 @@ export default function DashboardPage() {
         ) : (
           <div className="space-y-8">
             {/* Overview Cards */}
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="grid md:grid-cols-5 gap-6">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-slate-600">Total Staked Value</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">$7,000.00</div>
+                  <div className="text-2xl font-bold">566,250 CKB</div>
+                  <div className="text-sm text-slate-500">$7,000.00</div>
                   <div className="text-sm text-green-600 flex items-center mt-1">
                     <TrendingUp className="w-3 h-3 mr-1" />
                     +5.2% this period
@@ -618,21 +533,34 @@ export default function DashboardPage() {
 
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-600">Average APY</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-600">Total Rewards Earned</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-green-600">18.9%</div>
-                  <div className="text-sm text-slate-500 mt-1">across active programs</div>
+                  <div className="text-2xl font-bold">219,437 CKB</div>
+                  <div className="text-sm text-slate-500">$3,954.88</div>
+                  <div className="text-sm text-slate-500 mt-1">
+                    2,644.3 tokens earned (all time)
+                  </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-600">Total Rewards Earned</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-600">Historical APY</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">209.1</div>
-                  <div className="text-sm text-slate-500 mt-1">BANK tokens (all time)</div>
+                  <div className="text-2xl font-bold text-blue-600">19.5%</div>
+                  <div className="text-sm text-slate-500 mt-1">realized performance</div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-slate-600">Expected Aggregated APY</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">18.9%</div>
+                  <div className="text-sm text-slate-500 mt-1">current weighted average</div>
                 </CardContent>
               </Card>
 
@@ -683,7 +611,7 @@ export default function DashboardPage() {
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center space-x-2 mb-1">
                                 <h3 className="font-semibold text-base truncate">{position.tokenName}</h3>
-                                <Badge variant="secondary" className="text-xs">
+                                <Badge variant="secondary" className="text-xs whitespace-nowrap">
                                   {position.tokenSymbol}
                                 </Badge>
                                 <Link
@@ -696,53 +624,12 @@ export default function DashboardPage() {
                                 </Link>
                               </div>
 
-                              {/* Program description */}
-                              <p className="text-sm text-slate-600 mb-2 line-clamp-2">{position.description}</p>
-
-                              {/* Key metrics always visible */}
-                              <div className="grid grid-cols-3 gap-4 text-sm">
-                                <div>
-                                  <span className="text-slate-600">Currently Staked: </span>
-                                  <span className="font-medium">
-                                    {position.balance} {position.tokenSymbol}
-                                  </span>
-                                  <div className="text-xs text-slate-500">{position.balanceUSD}</div>
-                                </div>
-                                {position.programStatus === "Ongoing" && (
-                                  <>
-                                    <div>
-                                      <span className="text-purple-600">Est. Rewards: </span>
-                                      <span className="font-medium">
-                                        {position.estimatedRewards} {position.rewardToken}
-                                      </span>
-                                      {position.distributionMethod === "Periodic" && (
-                                        <div className="text-xs text-slate-500">per {position.periodDuration} days</div>
-                                      )}
-                                    </div>
-                                    <div>
-                                      <span className="text-green-600">APY: </span>
-                                      <span className="font-medium text-green-600">{position.estimatedAPY}</span>
-                                      <div className="text-xs text-slate-500">estimated</div>
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-
-                              {/* Show difference if significant */}
-                              {hasDifference && position.programStatus === "Ongoing" && (
-                                <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded text-xs">
-                                  <div className="text-blue-800">
-                                    <strong>Effective Average:</strong> {position.effectiveAverage}{" "}
-                                    {position.tokenSymbol}
-                                    {position.stakingDate && (
-                                      <span className="text-blue-600 ml-1">(staked {position.stakingDate})</span>
-                                    )}
-                                  </div>
-                                  <div className="text-blue-600">
-                                    Rewards calculated on effective average for this period
-                                  </div>
-                                </div>
-                              )}
+                              {/* Shorter program description */}
+                              <p className="text-sm text-slate-600 mb-2 line-clamp-1 max-w-md">
+                                {position.description.length > 80 
+                                  ? position.description.substring(0, 80) + "..."
+                                  : position.description}
+                              </p>
                             </div>
                           </div>
 
@@ -751,7 +638,7 @@ export default function DashboardPage() {
                               {getProgramStatusBadge(position.programStatus)}
                               {getFundingBadge(position.funding.completionPercentage, position.programStatus)}
                             </div>
-                            <div className="text-xs text-slate-500">
+                            <div className="text-xs text-slate-500 whitespace-nowrap">
                               {getDistributionBadge(position.distributionMethod, position.totalPeriods)}
                             </div>
                           </div>
@@ -759,35 +646,157 @@ export default function DashboardPage() {
                       </CardHeader>
 
                       <CardContent className="pt-0">
-                        {/* Essential info always visible */}
-                        <div className="grid grid-cols-4 gap-3 mb-4 p-3 bg-slate-50/50 rounded-lg">
-                          <div className="text-center">
-                            <div className="text-xs text-slate-500">Min Stake</div>
-                            <div className="text-sm font-medium">
-                              {position.minStakeAmount} {position.tokenSymbol}
+                        {/* My Staking banner with styled info matching current period rewards */}
+                        <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                          <div className="flex items-stretch justify-between min-h-[100px]">
+                            <div className="flex-1 flex flex-col justify-between">
+                              <div className="text-sm font-medium text-blue-900 mb-1">My Staking</div>
+                              <div className="space-y-2 flex-1 flex flex-col justify-center">
+                                <div>
+                                  <div className="text-xs text-slate-500">Currently Staked</div>
+                                  <div className="text-lg font-bold text-green-600">
+                                    {position.balance} {position.tokenSymbol}
+                                    {hasStakingDifference(position.balance, position.effectiveAverage) && (
+                                      <span className="text-sm text-slate-500 ml-2">
+                                        ({position.effectiveAverage} effective this period)
+                                      </span>
+                                    )}
+                                  </div>
+                                  {hasStakingDifference(position.balance, position.effectiveAverage) && (
+                                    <div className="text-xs text-slate-400 mt-1">
+                                      Effective amount is lower because you staked mid-period
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <div className="text-xs text-slate-500">Accumulated Rewards</div>
+                                  <div className="text-lg font-bold text-green-600">
+                                    {position.collectedRewards || "0"} {position.rewardToken}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {position.programStatus === "Ongoing" && (
+                              <div className="text-right flex flex-col justify-between">
+                                <div className="text-sm font-medium text-blue-900 mb-1">Current Period Rewards</div>
+                                <div className="flex-1 flex flex-col justify-center">
+                                  <div className="text-lg font-bold text-green-600">
+                                    {position.estimatedRewards} {position.rewardToken}
+                                  </div>
+                                  <div className="text-xs text-slate-500">
+                                    estimated for {position.periodDuration} days
+                                  </div>
+                                  <div className="text-xs text-slate-500">
+                                    (~{position.estimatedRewards} {position.rewardToken} per {position.periodDuration} days)
+                                  </div>
+                                </div>
+                                <div className="text-sm font-medium text-green-600 mt-1">
+                                  Est. APY: {position.estimatedAPY}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Program details - reorganized into 2 rows with icons */}
+                        <div className="mb-4 p-3 bg-slate-50/50 rounded-lg">
+                          {/* First row: Distribution, Rewards, Total Rewards, Periods Remaining (4 items) */}
+                          <div className="grid grid-cols-12 gap-2 mb-3">
+                            <div className="col-span-3 text-center">
+                              <div className="flex items-center justify-center mb-1">
+                                <ArrowUpDown className="w-3 h-3 text-slate-500 mr-1" />
+                                <div className="text-xs text-slate-500">Distribution Mode</div>
+                              </div>
+                              <div className="text-sm font-medium">
+                                {position.distributionMethod} - {position.distributionMode}
+                              </div>
+                            </div>
+                            <div className="col-span-3 text-center">
+                              <div className="flex items-center justify-center mb-1">
+                                <Gift className="w-3 h-3 text-slate-500 mr-1" />
+                                <div className="text-xs text-slate-500">Rewards</div>
+                              </div>
+                              <div className="text-sm font-medium text-purple-600">{position.rewardToken}</div>
+                            </div>
+                            <div className="col-span-3 text-center">
+                              <div className="flex items-center justify-center mb-1">
+                                <TrendingUp className="w-3 h-3 text-slate-500 mr-1" />
+                                <div className="text-xs text-slate-500">Total Rewards</div>
+                              </div>
+                              <div className="text-sm font-medium text-green-600">
+                                {position.funding.funded}
+                                {position.distributionMode === "Even" && position.rewardType === "individual" && " (per staker)"}
+                              </div>
+                            </div>
+                            <div className="col-span-3 text-center">
+                              <div className="flex items-center justify-center mb-1">
+                                <Clock className="w-3 h-3 text-slate-500 mr-1" />
+                                <div className="text-xs text-slate-500">Distribution Schedule</div>
+                              </div>
+                              <div className="text-sm font-medium">
+                                {position.totalPeriods 
+                                  ? `${position.remainingPeriods} of ${position.totalPeriods}`
+                                  : "Unlimited"}
+                              </div>
                             </div>
                           </div>
-                          <div className="text-center">
-                            <div className="text-xs text-slate-500">Distribution</div>
-                            <div className="text-sm font-medium">{position.distributionMode}</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-xs text-slate-500">Rewards</div>
-                            <div className="text-sm font-medium text-purple-600">{position.rewardToken}</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-xs text-slate-500">
-                              {position.distributionMethod === "Periodic" ? "Period" : "Duration"}
+                          
+                          {/* Second row: Minimum Stake, Lock Requirement, Period Duration, Snapshot Interval (4 items) */}
+                          <div className="grid grid-cols-12 gap-2">
+                            <div className="col-span-3 text-center">
+                              <div className="flex items-center justify-center mb-1">
+                                <Coins className="w-3 h-3 text-slate-500 mr-1" />
+                                <div className="text-xs text-slate-500">Minimum Stake</div>
+                              </div>
+                              <div className="text-sm font-medium">
+                                {position.minStakeAmount} {position.tokenSymbol}
+                              </div>
                             </div>
-                            <div className="text-sm font-medium">
-                              {position.distributionMethod === "Periodic"
-                                ? `${position.periodDuration}d`
-                                : `${position.programDuration}d`}
+                            <div className="col-span-3 text-center">
+                              <div className="flex items-center justify-center mb-1">
+                                <Lock className="w-3 h-3 text-slate-500 mr-1" />
+                                <div className="text-xs text-slate-500">Lock Requirement</div>
+                              </div>
+                              <div className="text-sm font-medium">{position.lockRequirement}</div>
+                            </div>
+                            <div className="col-span-3 text-center">
+                              <div className="flex items-center justify-center mb-1">
+                                <Calendar className="w-3 h-3 text-slate-500 mr-1" />
+                                <div className="text-xs text-slate-500">Period Duration</div>
+                              </div>
+                              <div className="text-sm font-medium">
+                                {position.periodDuration} days
+                              </div>
+                            </div>
+                            <div className="col-span-3 text-center">
+                              <div className="flex items-center justify-center mb-1">
+                                <Camera className="w-3 h-3 text-slate-500 mr-1" />
+                                <div className="text-xs text-slate-500">Snapshot Interval</div>
+                              </div>
+                              <div className="text-sm font-medium">Daily</div>
                             </div>
                           </div>
                         </div>
 
-                        {/* Period Progress for Ongoing Periodic Programs - Always Visible */}
+                        {/* Status-specific notifications */}
+                        {position.programStatus === "Preview" && (
+                          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div className="text-sm font-medium text-blue-800 mb-1">Preview Mode</div>
+                            <div className="text-xs text-blue-700">Configuration pending. Staking available once locked and funded.</div>
+                          </div>
+                        )}
+                        
+                        {position.programStatus === "Configured" && (
+                          <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                            <div className="text-sm font-medium text-orange-800 mb-1">Awaiting Funding</div>
+                            <div className="text-xs text-orange-700">
+                              Configuration locked. Needs{" "}
+                              {position.funding.completionPercentage === 0 ? "funding" : "full funding"} to start.
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Period Progress for Ongoing Periodic Programs - Always Visible with End Date */}
                         {position.programStatus === "Ongoing" && position.distributionMethod === "Periodic" && (
                           <div className="mb-4 p-3 bg-white rounded-lg border">
                             <div className="flex items-center justify-between mb-2">
@@ -798,217 +807,29 @@ export default function DashboardPage() {
                                 <span className="text-sm font-medium">{position.periodProgress}%</span>
                                 <Button variant="ghost" size="sm" className="h-6 px-2">
                                   <RefreshCw className="w-3 h-3 mr-1" />
-                                  <span className="text-xs">Snapshot</span>
                                 </Button>
-                                <Popover>
-                                  <PopoverTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                                      <HelpCircle className="w-3 h-3 text-slate-400" />
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent className="w-80 text-sm">
-                                    <p>
-                                      <strong>Manual Snapshot:</strong> Use if your recent balance changes aren't
-                                      reflected in the effective average for the current period.
-                                    </p>
-                                  </PopoverContent>
-                                </Popover>
                               </div>
                             </div>
                             <Progress value={position.periodProgress} className="h-2 mb-2" />
                             <div className="flex items-center justify-between text-xs text-slate-500">
-                              <span>{position.daysRemaining} days remaining</span>
-                              {position.totalPeriods && (
-                                <span>
-                                  {position.remainingPeriods} of {position.totalPeriods} periods left
-                                </span>
-                              )}
+                              <span>Ends: {position.periodEndDate}</span>
+                              <div className="text-right">
+                                <div>{position.daysRemaining} days remaining</div>
+                                {position.totalPeriods && (
+                                  <div>
+                                    {position.remainingPeriods} of {position.totalPeriods} periods left
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           </div>
                         )}
 
-                        {/* Collapsible detailed information */}
-                        <Collapsible open={isExpanded} onOpenChange={() => toggleCard(position.id)}>
-                          <CollapsibleTrigger asChild>
-                            <Button variant="ghost" size="sm" className="w-full justify-between p-2 h-8 text-xs">
-                              <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
-                              <ChevronDown
-                                className={`w-3 h-3 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
-                              />
-                            </Button>
-                          </CollapsibleTrigger>
-                          <CollapsibleContent className="space-y-3 mt-3">
-                            {/* Effective Average and USD Values */}
-                            {position.programStatus === "Ongoing" && (
-                              <div className="grid md:grid-cols-2 gap-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                                <div>
-                                  <div className="text-sm font-medium text-blue-900 mb-2">Position Details</div>
-                                  <div className="space-y-1 text-sm">
-                                    <div className="flex justify-between">
-                                      <span className="text-blue-700">Current Balance:</span>
-                                      <span className="font-medium">
-                                        {position.balance} {position.tokenSymbol}
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-blue-700">Effective Average:</span>
-                                      <span className="font-medium">
-                                        {position.effectiveAverage} {position.tokenSymbol}
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-blue-700">USD Value:</span>
-                                      <span className="font-medium">{position.effectiveAverageUSD}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-blue-700">CKB Value:</span>
-                                      <span className="font-medium">{position.effectiveAverageCKB}</span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div>
-                                  <div className="text-sm font-medium text-blue-900 mb-2">Rewards Summary</div>
-                                  <div className="space-y-1 text-sm">
-                                    <div className="flex justify-between">
-                                      <span className="text-blue-700">Current Period:</span>
-                                      <span className="font-medium">
-                                        {position.estimatedRewards} {position.rewardToken}
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-blue-700">Estimated APY:</span>
-                                      <span className="font-medium text-green-600">{position.estimatedAPY}</span>
-                                    </div>
-                                    {position.collectedRewards && Number.parseFloat(position.collectedRewards) > 0 && (
-                                      <div className="flex justify-between">
-                                        <span className="text-blue-700">Collected:</span>
-                                        <span className="font-medium">
-                                          {position.collectedRewards} {position.rewardToken}
-                                        </span>
-                                      </div>
-                                    )}
-                                    <div className="flex justify-between">
-                                      <span className="text-blue-700">Participation:</span>
-                                      <span className="font-medium text-green-600">
-                                        {position.userPosition?.participationRate || "100%"}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Snapshot Information for Ongoing Programs */}
-                            {position.programStatus === "Ongoing" && (
-                              <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                                <div className="text-sm font-medium text-green-800 mb-1">Snapshot Status</div>
-                                <div className="text-xs text-green-700 space-y-1">
-                                  <div>Last snapshot: {position.lastSnapshot}</div>
-                                  <div>Next snapshot: in {position.nextSnapshot}</div>
-                                  <div>Last trigger: {position.lastTriggerTime}</div>
-                                  <div>Status: Healthy • Daily snapshots active</div>
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Funding Information */}
-                            <div className="grid md:grid-cols-2 gap-4 p-3 bg-white rounded-lg border">
-                              <div>
-                                <div className="text-sm font-medium text-slate-600 mb-2">
-                                  {position.distributionMethod === "Periodic"
-                                    ? "Current Period Funding"
-                                    : "Total Program Funding"}
-                                </div>
-                                <div className="space-y-1">
-                                  <div className="text-sm">
-                                    <span className="font-medium">
-                                      {position.funding.funded} / {position.funding.expected}
-                                    </span>
-                                    <span className="text-slate-500 ml-2">
-                                      ({position.funding.completionPercentage}%)
-                                    </span>
-                                  </div>
-                                  <div className="text-xs text-slate-500">
-                                    {position.funding.fundedUSD} / {position.funding.expectedUSD}
-                                  </div>
-                                  <Progress value={position.funding.completionPercentage} className="h-1 mt-2" />
-                                </div>
-                              </div>
-                              <div>
-                                <div className="text-sm font-medium text-slate-600 mb-2">Program Configuration</div>
-                                <div className="space-y-1 text-xs text-slate-600">
-                                  <div>Lock: {position.lockRequirement}</div>
-                                  <div>Method: {position.distributionMethod}</div>
-                                  <div>Mode: {position.distributionMode}</div>
-                                  {position.distributionMethod === "Periodic" ? (
-                                    <div>
-                                      Every {position.periodDuration} days
-                                      {position.totalPeriods && ` (${position.totalPeriods} total)`}
-                                    </div>
-                                  ) : (
-                                    <div>Duration: {position.programDuration} days</div>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Total Program Funding for Limited Programs */}
-                            {position.totalProgramFunding && position.distributionMethod === "Periodic" && (
-                              <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                                <div className="text-sm font-medium text-purple-900 mb-2">Total Program Funding</div>
-                                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                                  <div>
-                                    <span className="text-purple-700">Funded: </span>
-                                    <span className="font-medium">{position.totalProgramFunding.funded}</span>
-                                    <div className="text-xs text-purple-600">
-                                      {position.totalProgramFunding.fundedUSD}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <span className="text-purple-700">Expected: </span>
-                                    <span className="font-medium">{position.totalProgramFunding.expected}</span>
-                                    <div className="text-xs text-purple-600">
-                                      {position.totalProgramFunding.expectedUSD}
-                                    </div>
-                                  </div>
-                                </div>
-                                <Progress
-                                  value={position.totalProgramFunding.completionPercentage}
-                                  className="h-1 mt-2"
-                                />
-                                <div className="text-xs text-purple-700 mt-1">
-                                  {position.totalProgramFunding.completionPercentage}% of total program funded
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Status-specific information */}
-                            {position.programStatus === "Preview" && (
-                              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                <div className="text-sm font-medium text-blue-800 mb-1">Preview Mode</div>
-                                <p className="text-xs text-blue-700">
-                                  Configuration pending. Staking available once locked and funded.
-                                </p>
-                              </div>
-                            )}
-
-                            {position.programStatus === "Configured" && (
-                              <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                                <div className="text-sm font-medium text-orange-800 mb-1">Awaiting Funding</div>
-                                <p className="text-xs text-orange-700">
-                                  Configuration locked. Needs{" "}
-                                  {position.funding.completionPercentage === 0 ? "funding" : "full funding"} to start.
-                                </p>
-                              </div>
-                            )}
-                          </CollapsibleContent>
-                        </Collapsible>
-
-                        {/* Action buttons */}
+                        {/* Action buttons with available balance and snapshot info */}
                         <div className="flex items-center justify-between pt-3 border-t mt-3">
                           <div className="text-xs text-slate-500">
                             {position.programStatus === "Ongoing" ? (
-                              <>Earning rewards • Last snapshot: {position.lastSnapshot}</>
+                              <>Last snapshot: {position.lastSnapshot} • Next: in {position.nextSnapshot}</>
                             ) : position.programStatus === "Preview" ? (
                               <>Waiting for configuration</>
                             ) : position.programStatus === "Configured" ? (
@@ -1020,25 +841,31 @@ export default function DashboardPage() {
                           <div className="flex items-center space-x-2">
                             {position.programStatus === "Ongoing" && (
                               <>
-                                {position.canStake && (
+                                {position.canStake && position.stakingPortalUrl && (
                                   <Button
-                                    variant="outline"
-                                    size="sm"
                                     asChild
-                                    className="h-7 px-2 text-xs bg-transparent"
+                                    className="h-8 px-3 text-xs bg-green-600 hover:bg-green-700 text-white border-0 shadow-sm"
                                   >
                                     <Link href={position.stakingPortalUrl}>
                                       <Coins className="w-3 h-3 mr-1" />
-                                      Stake
+                                      {position.tokenSymbol.includes('LP') ? (
+                                        <span>
+                                          Stake (Available: {walletBalances.BANK} BANK, {walletBalances.CKB || "0"} CKB)
+                                        </span>
+                                      ) : (
+                                        <span>
+                                          Stake (Available: {walletBalances[position.tokenSymbol as keyof typeof walletBalances] || "0"} {position.tokenSymbol})
+                                        </span>
+                                      )}
                                     </Link>
                                   </Button>
                                 )}
-                                {position.canUnstake && (
+                                {position.canUnstake && position.stakingPortalUrl && (
                                   <Button
                                     variant="outline"
-                                    size="sm"
+                                    size="default"
                                     asChild
-                                    className="h-7 px-2 text-xs text-red-600 border-red-600 bg-transparent"
+                                    className="h-8 px-3 text-xs text-red-600 border-red-600 bg-transparent"
                                   >
                                     <Link href={`${position.stakingPortalUrl}?action=unstake`}>
                                       <ArrowDownRight className="w-3 h-3 mr-1" />
@@ -1048,7 +875,7 @@ export default function DashboardPage() {
                                 )}
                               </>
                             )}
-                            <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs bg-transparent">
+                            <Button variant="outline" size="default" asChild className="h-8 px-3 text-xs bg-transparent">
                               <Link href={`/program/${position.id}`}>Details</Link>
                             </Button>
                           </div>
@@ -1128,11 +955,11 @@ export default function DashboardPage() {
                           <Badge className="bg-green-600 text-white">Ongoing</Badge>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm">BANK/CKB LP-UTXOSwap (14-day periods, 24 total)</span>
+                          <span className="text-sm">BANK/CKB Liquidity Pool on UTXOSwap (14-day periods, 24 total)</span>
                           <Badge className="bg-green-600 text-white">Ongoing</Badge>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm">BANK/RUSD LP-UTXOSwap (21-day periods, unlimited)</span>
+                          <span className="text-sm">BANK/RUSD Liquidity Pool on UTXOSwap (21-day periods, unlimited)</span>
                           <Badge className="bg-green-600 text-white">Ongoing</Badge>
                         </div>
                         <div className="flex items-center justify-between">

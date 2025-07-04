@@ -1,4 +1,4 @@
-import { ArrowRight, Shield, Zap, Users, TrendingUp, Clock, Gift } from "lucide-react"
+import { ArrowRight, Shield, Zap, Users, TrendingUp, Clock, Gift, Target, Coins } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
@@ -16,11 +16,14 @@ export default function HomePage() {
             <span className="text-xl font-bold">CKB UDT Staking</span>
           </div>
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/deploy" className="text-slate-600 hover:text-slate-900">
-              Deploy
-            </Link>
             <Link href="/dashboard" className="text-slate-600 hover:text-slate-900">
-              Dashboard
+              My Stakings
+            </Link>
+            <Link href="/programs" className="text-slate-600 hover:text-slate-900">
+              Explore Programs
+            </Link>
+            <Link href="/configure" className="text-slate-600 hover:text-slate-900">
+              Manage Programs
             </Link>
             <Link href="/docs" className="text-slate-600 hover:text-slate-900">
               Docs
@@ -42,15 +45,52 @@ export default function HomePage() {
             Deploy decentralized reward distribution for any UDT token on CKB. Support both possession-based rewards and
             liquid staking with complete automation.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild className="bg-gradient-to-r from-purple-600 to-blue-600">
-              <Link href="/deploy">
-                Deploy Staking Program <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/dashboard">View Dashboard</Link>
-            </Button>
+          
+          {/* Separate User Guidance */}
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <Card className="border-0 shadow-lg p-6">
+              <CardHeader className="pb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Coins className="w-6 h-6 text-white" />
+                </div>
+                <CardTitle className="text-xl">Looking to Stake?</CardTitle>
+                <CardDescription className="text-base">
+                  Discover staking opportunities and earn rewards on your existing UDT tokens
+                </CardDescription>
+              </CardHeader>
+              <div className="space-y-4">
+                <Button size="lg" asChild className="w-full bg-gradient-to-r from-green-500 to-emerald-600">
+                  <Link href="/programs">
+                    Explore Programs <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="w-full">
+                  <Link href="/dashboard">View My Stakings</Link>
+                </Button>
+              </div>
+            </Card>
+
+            <Card className="border-0 shadow-lg p-6">
+              <CardHeader className="pb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+                <CardTitle className="text-xl">Deploy Rewards Program?</CardTitle>
+                <CardDescription className="text-base">
+                  Create and deploy staking reward programs for your UDT token
+                </CardDescription>
+              </CardHeader>
+              <div className="space-y-4">
+                <Button size="lg" asChild className="w-full bg-gradient-to-r from-purple-600 to-blue-600">
+                  <Link href="/deploy">
+                    Deploy Staking Reward Programs <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="w-full">
+                  <Link href="/configure">Manage Programs</Link>
+                </Button>
+              </div>
+            </Card>
           </div>
         </div>
       </section>
@@ -182,7 +222,7 @@ export default function HomePage() {
           </p>
           <Button size="lg" variant="secondary" asChild>
             <Link href="/deploy">
-              Start Deployment <ArrowRight className="ml-2 w-4 h-4" />
+              Deploy Staking Reward Programs <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
           </Button>
         </div>
@@ -211,12 +251,12 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link href="/dashboard" className="hover:text-white">
-                    Dashboard
+                    My Stakings
                   </Link>
                 </li>
                 <li>
                   <Link href="/configure" className="hover:text-white">
-                    Configure
+                    Manage Programs
                   </Link>
                 </li>
               </ul>

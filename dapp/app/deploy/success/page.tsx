@@ -66,13 +66,16 @@ export default function DeploymentSuccessPage() {
               </Link>
               <div className="flex items-center space-x-4">
                 <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
-                  Dashboard
+                  My Stakings
                 </Link>
                 <Link href="/programs" className="text-sm text-slate-600 hover:text-slate-900">
-                  Programs
+                  Explore Programs
                 </Link>
-                <Link href="/deploy" className="text-sm text-purple-600 font-medium">
-                  Deploy
+                <Link href="/configure" className="text-sm text-slate-600 hover:text-slate-900">
+                  Manage Programs
+                </Link>
+                <Link href="/docs" className="text-sm text-slate-600 hover:text-slate-900">
+                  Docs
                 </Link>
               </div>
             </div>
@@ -126,109 +129,139 @@ export default function DeploymentSuccessPage() {
           </CardContent>
         </Card>
 
+        {/* Funding and Configuration Status */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Funding & Configuration Status</CardTitle>
+            <CardDescription>Current funding status and configuration locking information</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h4 className="font-medium mb-3 flex items-center">
+                  <CheckCircle className="w-4 h-4 mr-1 text-green-600" />
+                  Initial Funding Applied
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Funded Amount:</span>
+                    <span className="font-medium">10,000 BANK</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Coverage:</span>
+                    <span className="font-medium text-green-600">3.2 periods (~96 days)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Status:</span>
+                    <span className="font-medium text-green-600">Ready for Staking</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                <h4 className="font-medium mb-3 flex items-center">
+                  <Settings className="w-4 h-4 mr-1" />
+                  Configuration Locking
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Lock Strategy:</span>
+                    <span className="font-medium">Scheduled</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Expected Lock Time:</span>
+                    <span className="font-medium">Dec 15, 2:00 PM UTC</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Program Start:</span>
+                    <span className="font-medium">Dec 16, 12:00 AM UTC</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">First Snapshot:</span>
+                    <span className="font-medium">Dec 17, 12:00 AM UTC</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Program Ready:</strong> Your program is fully funded and ready for staking. Users can begin staking immediately once the configuration is locked.
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+
         {/* Automation Setup Status */}
         {showAutomationSetup && (
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Cloud className="w-5 h-5" />
-                <span>Automation Setup</span>
+                <span>Manual Automation Setup Required</span>
               </CardTitle>
               <CardDescription>
-                {setupSkipped ? "Automation setup was skipped" : "Setting up snapshot automation automatically"}
+                Automation is not set up automatically. You need to manually deploy and authenticate with Cloudflare.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {!setupSkipped ? (
-                <div className="space-y-4">
-                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-4">
-                    <h4 className="font-medium text-blue-900 mb-2">Configuring Default Automation</h4>
-                    <div className="space-y-1 text-sm text-blue-800">
-                      <div>• Provider: Cloudflare Workers (global edge network)</div>
-                      <div>• Schedule: Daily snapshots at 00:00 UTC</div>
-                      <div>• Monitoring: Automatic health checks and alerts</div>
+              <div className="space-y-4">
+                <Alert>
+                  <Settings className="h-4 w-4" />
+                  <AlertDescription>
+                    <strong>Important:</strong> To enable automated snapshots, you must manually click the one-click deployment button below and authenticate with Cloudflare.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h4 className="font-medium text-blue-900 mb-3">Setup Instructions</h4>
+                  <div className="space-y-2 text-sm text-blue-800">
+                    <div>1. Click the "Deploy to Cloudflare" button below</div>
+                    <div>2. Authenticate with your Cloudflare account</div>
+                    <div>3. Complete the deployment process</div>
+                    <div>4. Your automation will be active once deployed</div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <div className="text-sm text-slate-600 mb-2">Manual Trigger Webhook URL</div>
+                    <div className="font-mono text-xs bg-slate-100 p-2 rounded flex items-center justify-between">
+                      {programData.webhookUrl}
+                      <Button variant="ghost" size="sm" onClick={() => copyToClipboard(programData.webhookUrl)}>
+                        <Copy className="w-3 h-3" />
+                      </Button>
                     </div>
+                    <p className="text-xs text-slate-500 mt-1">
+                      You can use this URL to manually trigger snapshots or integrate with your own automation system.
+                    </p>
                   </div>
 
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-slate-600">Setup Progress</span>
-                      <span className="text-sm font-medium">{automationProgress}%</span>
-                    </div>
-                    <Progress value={automationProgress} className="h-2" />
-                  </div>
-
-                  {!automationComplete ? (
-                    <div className="space-y-2 text-sm text-slate-600">
-                      <div>• Creating Cloudflare Worker...</div>
-                      <div>• Configuring cron triggers...</div>
-                      <div>• Setting up webhook endpoints...</div>
-                      <div>• Testing connectivity...</div>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <Alert>
-                        <CheckCircle className="h-4 w-4" />
-                        <AlertDescription>
-                          <strong>Automation configured successfully!</strong> Your program will take snapshots
-                          automatically.
-                        </AlertDescription>
-                      </Alert>
-
-                      <div className="space-y-3">
-                        <div>
-                          <div className="text-sm text-slate-600">Worker URL</div>
-                          <div className="font-mono text-sm bg-slate-100 p-2 rounded flex items-center justify-between">
-                            {programData.workerUrl}
-                            <div className="flex space-x-1">
-                              <Button variant="ghost" size="sm" onClick={() => copyToClipboard(programData.workerUrl)}>
-                                <Copy className="w-3 h-3" />
-                              </Button>
-                              <Button variant="ghost" size="sm" asChild>
-                                <a href={programData.workerUrl} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="w-3 h-3" />
-                                </a>
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="text-sm text-slate-600">Webhook URL</div>
-                          <div className="font-mono text-xs bg-slate-100 p-2 rounded flex items-center justify-between">
-                            {programData.webhookUrl}
-                            <Button variant="ghost" size="sm" onClick={() => copyToClipboard(programData.webhookUrl)}>
-                              <Copy className="w-3 h-3" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {!automationComplete && (
-                    <div className="flex justify-center">
-                      <Button variant="outline" onClick={() => setSetupSkipped(true)} className="text-slate-600">
-                        Skip for Now
+                    <div className="text-sm text-slate-600 mb-2">Distribution Trigger Webhook</div>
+                    <div className="font-mono text-xs bg-slate-100 p-2 rounded flex items-center justify-between">
+                      https://your-site.netlify.app/.netlify/functions/webhook-distribute?typeId={programData.typeId.slice(0, 16)}...
+                      <Button variant="ghost" size="sm" onClick={() => copyToClipboard(`https://your-site.netlify.app/.netlify/functions/webhook-distribute?typeId=${programData.typeId}`)}>
+                        <Copy className="w-3 h-3" />
                       </Button>
                     </div>
-                  )}
+                    <p className="text-xs text-slate-500 mt-1">
+                      Use this URL to manually trigger reward distribution when periods end.
+                    </p>
+                  </div>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  <Alert>
-                    <Settings className="h-4 w-4" />
-                    <AlertDescription>
-                      Automation setup was skipped. You can configure it later through the program management interface.
-                    </AlertDescription>
-                  </Alert>
 
-                  <Button variant="outline" className="w-full bg-transparent">
+                <div className="flex space-x-3">
+                  <Button size="lg" className="bg-orange-500 hover:bg-orange-600">
                     <Cloud className="w-4 h-4 mr-2" />
-                    Set Up Automation Now
+                    Deploy to Cloudflare
+                  </Button>
+                  <Button variant="outline" onClick={() => setSetupSkipped(true)}>
+                    Skip Automation Setup
                   </Button>
                 </div>
-              )}
+              </div>
             </CardContent>
           </Card>
         )}
@@ -238,18 +271,30 @@ export default function DeploymentSuccessPage() {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle>Next Steps</CardTitle>
-              <CardDescription>Complete these steps to activate your staking program</CardDescription>
+              <CardDescription>Your program is funded and ready - complete these steps to go live</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
+                <div className="flex items-start space-x-3 p-3 border rounded-lg">
+                  <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-bold">
+                    ✓
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">Program Funded</div>
+                    <div className="text-sm text-slate-600 mt-1">
+                      Your program is funded with 10,000 BANK tokens covering 3.2 periods. Users can stake immediately once configuration is locked.
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex items-start space-x-3 p-3 border rounded-lg">
                   <div className="w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-bold">
                     1
                   </div>
                   <div className="flex-1">
-                    <div className="font-medium">Fund Your Program</div>
+                    <div className="font-medium">Monitor Configuration Lock</div>
                     <div className="text-sm text-slate-600 mt-1">
-                      Deposit reward tokens to activate staking and start distributing rewards to participants.
+                      Configuration will be locked on Dec 15 at 2:00 PM UTC. After this, the program becomes immutable and staking becomes available.
                     </div>
                   </div>
                 </div>
@@ -267,7 +312,7 @@ export default function DeploymentSuccessPage() {
                 </div>
 
                 <div className="flex items-start space-x-3 p-3 border rounded-lg">
-                  <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-bold">
+                  <div className="w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-bold">
                     3
                   </div>
                   <div className="flex-1">
