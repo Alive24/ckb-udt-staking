@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useProgramData } from "@/lib/providers/program-provider"
 import {
   Wallet,
   TrendingUp,
@@ -33,6 +34,74 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 export default function DashboardPage() {
   const [isConnected, setIsConnected] = useState(true)
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({})
+
+  // Get data from provider
+  const { userPositions, loading, error } = useProgramData()
+
+  // Adapter function to convert UserPosition to expected dashboard format
+  const adaptUserPositions = (positions: typeof userPositions) => {
+    return positions.map(position => ({
+      id: position.id,
+      tokenName: position.programName,
+      tokenSymbol: position.token,
+      tokenLogo: `https://picsum.photos/32/32?random=${position.id.slice(-1)}`,
+      description: `Staking ${position.token} tokens`,
+      balance: position.amount.split(' ')[0],
+      balanceUSD: `$${(parseFloat(position.amount.split(' ')[0].replace(',', '')) * 1.5).toFixed(2)}`,
+      balanceCKB: `${(parseFloat(position.amount.split(' ')[0].replace(',', '')) * 125).toFixed(0)} CKB`,
+      effectiveAverage: position.amount.split(' ')[0],
+      effectiveAverageUSD: `$${(parseFloat(position.amount.split(' ')[0].replace(',', '')) * 1.5).toFixed(2)}`,
+      effectiveAverageCKB: `${(parseFloat(position.amount.split(' ')[0].replace(',', '')) * 125).toFixed(0)} CKB`,
+      stakingDate: new Date().toISOString().split('T')[0],
+      currentPeriod: "Period 1",
+      periodDuration: 30,
+      totalPeriods: 12,
+      remainingPeriods: 11,
+      periodProgress: 65,
+      periodStartDate: new Date().toISOString().split('T')[0],
+      periodEndDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      daysRemaining: 11,
+      estimatedRewards: position.rewards.split(' ')[0] || "0",
+      estimatedAPY: position.apy,
+      collectedRewards: "0",
+      rewardToken: position.token,
+      rewardType: "shared",
+      lastSnapshot: "2 hours ago",
+      nextSnapshot: position.timeLeft || "1d",
+      lastTriggerTime: new Date().toISOString(),
+      programStatus: position.status === "active" ? "Ongoing" : position.status === "unstaking" ? "Configured" : "Preview",
+      isConfigured: true,
+      isFunded: true,
+      distributionMethod: "Periodic",
+      distributionMode: "Proportional",
+      minStakeAmount: "100",
+      lockRequirement: "Lock until each distribution",
+      funding: {
+        funded: `${position.rewards.split(' ')[0] || "1000"} ${position.token}`,
+        fundedUSD: "$1,500.00",
+        fundedCKB: "125,000 CKB",
+        expected: `${position.rewards.split(' ')[0] || "1000"} ${position.token}`,
+        expectedUSD: "$1,500.00",
+        expectedCKB: "125,000 CKB",
+        completionPercentage: 100,
+      },
+      totalProgramFunding: {
+        funded: `${(parseFloat(position.rewards.split(' ')[0] || "1000") * 10)} ${position.token}`,
+        fundedUSD: "$15,000.00",
+        fundedCKB: "1,250,000 CKB",
+        expected: `${(parseFloat(position.rewards.split(' ')[0] || "1000") * 15)} ${position.token}`,
+        expectedUSD: "$22,500.00",
+        expectedCKB: "1,875,000 CKB",
+        completionPercentage: 67,
+      },
+      canStake: true,
+      canUnstake: position.status === "active",
+      stakingPortalUrl: `/stake/${position.programId}`,
+      isExternalStaking: false,
+    }))
+  }
+
+  const adaptedPositions = adaptUserPositions(userPositions)
 
   const toggleCard = (cardId: string) => {
     setExpandedCards((prev) => ({
@@ -455,9 +524,32 @@ export default function DashboardPage() {
     return Math.abs(balanceNum - effectiveNum) / balanceNum > 0.1 // 10% difference
   }
 
-  const isOngoing = (status: string) => status === "Ongoing"
-  const isConfigured = (status: string) => status === "Configured"
-  const isPreview = (status: string) => status === "Preview"
+  const isOngoing = (status: string) => status === "active"
+  const isConfigured = (status: string) => status === "upcoming"
+  const isPreview = (status: string) => status === "completed"
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-purple-600" />
+          <p className="text-slate-600">Loading your positions...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 mx-auto mb-4 text-red-600">⚠️</div>
+          <p className="text-slate-600 mb-4">Error loading positions: {error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -583,7 +675,7 @@ export default function DashboardPage() {
               </TabsList>
 
               <TabsContent value="positions" className="space-y-4">
-                {mockPositions.map((position) => {
+                {adaptedPositions.map((position) => {
                   const isExpanded = expandedCards[position.id] || false
                   const hasDifference = hasStakingDifference(position.balance, position.effectiveAverage)
 

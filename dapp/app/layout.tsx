@@ -1,24 +1,43 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
+import { ProgramProvider } from "@/lib/providers/program-provider";
+import { ProtocolProvider } from "@/lib/providers/protocol-provider";
 
-const inter = Inter({ subsets: ["latin"] })
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff2",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff2",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
-  title: "CKB UDT Staking Platform",
-  description: "Universal decentralized staking platform for CKB UDT tokens",
-    generator: 'v0.dev'
-}
+  title: "CKB UDT Staking",
+  description: "Stake your UDT tokens and earn rewards on Nervos CKB",
+};
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ProtocolProvider>
+          <ProgramProvider>
+            {children}
+            <Toaster />
+          </ProgramProvider>
+        </ProtocolProvider>
+      </body>
     </html>
-  )
+  );
 }
