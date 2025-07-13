@@ -1,0 +1,195 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Development Environment and Project Infrastructure",
+        "description": "Initialize project repository with Rust and TypeScript toolchains, configure CKB development environment with local node, and set up frontend infrastructure using Next.js, React 18+, TypeScript 5+, and Tailwind CSS",
+        "details": "1. Create monorepo structure with /contracts (Rust), /dapp (Next.js), /docs folders\n2. Initialize Rust workspace for smart contracts with ckb-std library dependencies\n3. Setup Next.js 14+ with TypeScript, Tailwind CSS, and @ckb-ccc/connector-react for wallet integration\n4. Configure CKB local node and testnet connections\n5. Setup Netlify deployment configuration for frontend and serverless functions\n6. Initialize git with proper .gitignore for Rust/Node.js projects\n7. Configure ESLint, Prettier for TypeScript and Clippy for Rust\n8. Create build.rs for Molecule schema compilation",
+        "testStrategy": "Verify successful compilation of Rust contracts, Next.js dev server runs without errors, CKB node connectivity test passes, and Netlify deployment preview works correctly",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Git Repository and Monorepo Structure",
+            "description": "Create the base project structure with proper directory organization for contracts, dApp, and documentation",
+            "dependencies": [],
+            "details": "1. Initialize git repository with 'git init'\n2. Create directory structure: /contracts, /dapp, /docs\n3. Add comprehensive .gitignore for Rust (target/, Cargo.lock for libraries) and Node.js (node_modules/, .next/, .env.local)\n4. Create root README.md with project overview\n5. Setup .editorconfig for consistent formatting across Rust and TypeScript\n6. Create initial commit with base structure",
+            "status": "pending",
+            "testStrategy": "Verify directory structure exists, .gitignore properly excludes files, git status shows clean working directory"
+          },
+          {
+            "id": 2,
+            "title": "Setup Rust Workspace for Smart Contracts",
+            "description": "Configure Rust development environment with CKB-specific dependencies and tooling for smart contract development",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create /contracts/Cargo.toml with workspace configuration\n2. Add ckb-std = \"0.15\" and other CKB dependencies\n3. Install Rust toolchain with 'rustup install stable'\n4. Add Clippy and rustfmt configuration files\n5. Create build.rs for future Molecule schema compilation:\n```rust\nuse std::process::Command;\nuse std::fs;\n\nfn main() {\n    // Placeholder for Molecule compilation\n    println!(\"cargo:rerun-if-changed=../schemas/\");\n}\n```\n6. Setup cargo-generate template structure\n7. Configure rust-analyzer settings",
+            "status": "pending",
+            "testStrategy": "Run 'cargo check' in contracts directory, verify Clippy runs without errors, ensure build.rs is recognized"
+          },
+          {
+            "id": 3,
+            "title": "Initialize Next.js Frontend with TypeScript and Tailwind",
+            "description": "Create modern Next.js application with TypeScript 5+, Tailwind CSS, and CKB wallet integration setup",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Run 'npx create-next-app@latest dapp --typescript --tailwind --app --no-src-dir'\n2. Install CKB dependencies: '@ckb-ccc/connector-react', '@ckb-ccc/core'\n3. Configure TypeScript with strict mode and proper module resolution\n4. Setup Tailwind CSS with custom color scheme for CKB branding\n5. Create base layout with wallet connector provider:\n```typescript\n// app/providers.tsx\nimport { CkbConnectorProvider } from '@ckb-ccc/connector-react';\n```\n6. Configure ESLint and Prettier with TypeScript rules\n7. Add next.config.js with proper webpack configuration for CKB libraries",
+            "status": "pending",
+            "testStrategy": "Run 'npm run dev' successfully, verify TypeScript compilation, check wallet provider renders without errors"
+          },
+          {
+            "id": 4,
+            "title": "Configure CKB Development Environment and Connections",
+            "description": "Setup local CKB node, configure testnet connections, and create development utilities for blockchain interaction",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "1. Create docker-compose.yml for local CKB node:\n```yaml\nservices:\n  ckb-node:\n    image: nervos/ckb:latest\n    ports:\n      - '8114:8114'\n```\n2. Add environment configuration files:\n   - .env.local for dApp (RPC URLs, chain configs)\n   - .env.example with template values\n3. Create /dapp/lib/ckb-config.ts with connection settings\n4. Setup development scripts in package.json:\n   - 'dev:node': Start local CKB node\n   - 'dev:app': Start Next.js with CKB connections\n5. Configure testnet faucet integration\n6. Create connection test utility",
+            "status": "pending",
+            "testStrategy": "Successfully connect to local CKB node via RPC, verify testnet connection, test wallet connectivity"
+          },
+          {
+            "id": 5,
+            "title": "Setup Netlify Deployment and CI/CD Pipeline",
+            "description": "Configure Netlify for frontend hosting with serverless functions and establish continuous deployment workflow",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "1. Create netlify.toml with build configuration:\n```toml\n[build]\n  command = \"npm run build\"\n  publish = \"dapp/.next\"\n[functions]\n  directory = \"dapp/netlify/functions\"\n```\n2. Setup Netlify Functions directory structure\n3. Create example serverless function for API endpoints\n4. Configure environment variables in Netlify dashboard\n5. Setup GitHub Actions workflow for:\n   - Rust contract testing on push\n   - TypeScript linting and type checking\n   - Automated Netlify preview deployments\n6. Add build status badges to README\n7. Configure custom domain settings (if applicable)",
+            "status": "pending",
+            "testStrategy": "Deploy preview succeeds on Netlify, serverless function responds correctly, GitHub Actions pass all checks"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Design CKB Cell Data Structures and Molecule Schemas",
+        "description": "Design and implement Molecule schemas for all cell types including token configuration cells, reward period cells, possession snapshot cells, and configuration cells following CKB best practices",
+        "details": "Create Molecule schemas:\n```mol\ntable TokenConfig {\n    udt_script_hash: Byte32,\n    reward_approach: byte,\n    target_lock_hash: Byte32,\n    metadata: Bytes,\n}\n\ntable RewardPeriod {\n    period_id: Uint64,\n    start_time: Uint64,\n    end_time: Uint64,\n    deposit_amount: Uint128,\n    distribution_method: byte,\n    status: byte,\n}\n\ntable PossessionSnapshot {\n    period_id: Uint64,\n    timestamp: Uint64,\n    holder_address: Bytes,\n    amount: Uint128,\n    trigger_tx_hash: Byte32,\n}\n\ntable ConfigurationCell {\n    params: Bytes,\n    signatures: BytesVec,\n    time_lock_until: Uint64,\n    finalized: byte,\n}\n```\nImplement build.rs for schema compilation and create corresponding Rust structs",
+        "testStrategy": "Verify Molecule schema compilation succeeds, generated Rust code compiles without warnings, and unit tests for serialization/deserialization pass",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Implement Generic UDT Framework Foundation",
+        "description": "Create core smart contract infrastructure for generic UDT token interaction, including helper functions for reading UDT balances, validating token scripts, and managing token operations",
+        "details": "Implement in Rust:\n1. UDT validation module to verify any UDT script hash\n2. Balance calculation functions for arbitrary UDT tokens\n3. Generic token transfer helpers\n4. Cell searching utilities for finding UDT cells\n5. Create trait-based design for extensible token operations\n6. Implement error handling for invalid token configurations\n7. Add support for both sUDT and xUDT standards\n```rust\npub trait UDTOperations {\n    fn validate_udt_script(script: &Script) -> Result<(), Error>;\n    fn calculate_udt_balance(cells: &[Cell]) -> u128;\n    fn find_udt_cells(udt_hash: &[u8; 32]) -> Vec<Cell>;\n}\n```",
+        "testStrategy": "Unit tests for UDT validation with various token types, integration tests for balance calculations, mock tests for cell searching functionality",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Build Time-Locked Configuration System",
+        "description": "Implement public key-based configuration system with multi-signature validation and time-locked immutability to prevent manipulation after setup period",
+        "details": "Create configuration smart contract:\n1. Multi-sig validation logic requiring M-of-N signatures\n2. Time-lock mechanism preventing changes after setup period (e.g., 7 days)\n3. Parameter storage for reward periods, distribution methods, target specifications\n4. Automated finalization after time-lock expiration\n5. Public key management and signature verification\n6. Configuration history tracking in cells\n```rust\npub fn validate_configuration(\n    config: &ConfigurationCell,\n    current_timestamp: u64,\n    required_sigs: usize\n) -> Result<(), Error> {\n    // Check time-lock hasn't expired\n    // Verify sufficient valid signatures\n    // Validate parameter integrity\n}\n```",
+        "testStrategy": "Test multi-sig validation with various signature combinations, verify time-lock enforcement, test parameter finalization after expiry, ensure configuration immutability after lock",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Develop Possession Tracking and Snapshot System",
+        "description": "Build the core possession tracking engine that monitors token holdings across time periods, including snapshot triggering logic and inclusion-only append policy",
+        "details": "Implement possession tracking:\n1. Snapshot data structure with timestamp, holder, amount, trigger info\n2. Public trigger authorization rules in TypeScript\n3. Inclusion-only policy preventing snapshot removal\n4. Transaction cost attribution to trigger initiator\n5. Snapshot validation logic ensuring consistency\n6. Support for tracking regular UDT tokens, staked tokens, and specific lock code hashes\n```rust\npub fn create_possession_snapshot(\n    period_id: u64,\n    holder_lock: &Script,\n    amount: u128,\n    trigger_tx: &Transaction\n) -> PossessionSnapshot {\n    // Validate holder possession\n    // Create snapshot with trigger attribution\n    // Ensure append-only behavior\n}\n```\nTypeScript trigger rules:\n```typescript\nfunction canTriggerSnapshot(holder: string, period: Period): boolean {\n    return period.isActive() && !hasRecentSnapshot(holder, period);\n}\n```",
+        "testStrategy": "Test snapshot creation with various token holdings, verify append-only behavior, test trigger authorization rules, validate transaction cost attribution",
+        "priority": "high",
+        "dependencies": [
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Create Period Management and Reward Calculation Engine",
+        "description": "Implement period lifecycle management including period creation, deposit handling, automated distribution calculations based on possession snapshots, and period conclusion logic",
+        "details": "Build period management system:\n1. Period creation with start/end times and deposit amounts\n2. Deposit validation and tracking in cells\n3. Average possession calculation from periodic snapshots\n4. Fair distribution algorithm based on time-weighted possession\n5. Period status transitions (pending, active, concluded, distributed)\n6. Automated reward calculation at period end\n```rust\npub fn calculate_period_rewards(\n    period: &RewardPeriod,\n    snapshots: &[PossessionSnapshot],\n    total_deposit: u128\n) -> HashMap<Script, u128> {\n    // Calculate time-weighted average possession\n    // Distribute rewards proportionally\n    // Handle edge cases (no snapshots, single holder)\n}\n```",
+        "testStrategy": "Test period creation with various parameters, verify deposit handling, test reward calculations with different snapshot patterns, validate fair distribution algorithms",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Netlify Functions for Public Trigger APIs",
+        "description": "Create serverless Netlify Functions that serve as public APIs for triggering snapshots, distributions, and validations, callable by anyone following verification rules",
+        "details": "Implement Netlify Functions:\n1. `/api/trigger-snapshot` - Create possession snapshot for a holder\n2. `/api/trigger-distribution` - Initiate reward distribution for concluded period\n3. `/api/validate-period` - Check period status and eligibility\n4. `/api/read-cells` - Read CKB cell data for configuration and snapshots\n5. CKB transaction building using CCC framework\n6. Public authorization verification\n7. Error handling and rate limiting\n```typescript\n// netlify/functions/trigger-snapshot.ts\nexport const handler = async (event: any) => {\n    const { periodId, holderAddress } = JSON.parse(event.body);\n    // Verify trigger authorization\n    // Build CKB transaction for snapshot\n    // Submit to network with cost attribution\n    return { statusCode: 200, body: JSON.stringify({ txHash }) };\n}\n```",
+        "testStrategy": "Test API endpoints with various inputs, verify authorization rules, test CKB transaction building, ensure proper error responses, load test for performance",
+        "priority": "medium",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Build React Frontend with Wallet Integration",
+        "description": "Develop the core React application with Next.js, implement CCC wallet integration, create staking reward program setup wizard, and build possession-based reward interface",
+        "details": "Frontend implementation:\n1. Setup Next.js app with @ckb-ccc/connector-react global wallet connector\n2. Create wallet connection flow supporting Neuron, Portal, JoyID\n3. Implement token detection and balance display\n4. Build program setup wizard with step-by-step configuration\n5. Create possession tracking dashboard showing eligible holdings\n6. Period participation interface with status indicators\n7. Manual trigger UI for snapshots and distributions\n8. Responsive design with Tailwind CSS\n```typescript\n// components/WalletConnect.tsx\nimport { useWallet } from '@ckb-ccc/connector-react';\n\nexport function WalletConnect() {\n    const { open, disconnect, wallet } = useWallet();\n    // Implement connection UI\n}\n\n// components/ProgramSetup.tsx\nexport function ProgramSetupWizard() {\n    // Multi-step form for token configuration\n    // Period setup with deposits\n    // Multi-sig coordination\n}\n```",
+        "testStrategy": "Test wallet connections with different providers, verify token detection accuracy, test wizard flow completion, ensure responsive design on mobile",
+        "priority": "medium",
+        "dependencies": [
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Develop Dashboard Analytics and Reward Claiming",
+        "description": "Create comprehensive dashboard showing possession-based rewards, period participation status, historical distributions, and implement reward claiming functionality",
+        "details": "Dashboard features:\n1. Real-time possession tracking display\n2. Active period participation indicators\n3. Reward calculation preview based on current snapshots\n4. Historical period and distribution viewing\n5. Claim interface for distributed rewards\n6. Transaction history with filtering\n7. Export functionality for tax reporting\n8. Period countdown timers and status\n```typescript\n// components/Dashboard.tsx\nexport function RewardsDashboard() {\n    // Fetch user's possession snapshots\n    // Calculate expected rewards\n    // Display claimable amounts\n    // Show period timeline\n}\n\n// hooks/useRewards.ts\nexport function useRewards(address: string) {\n    // Query possession snapshots\n    // Calculate rewards across periods\n    // Track claim status\n}\n```",
+        "testStrategy": "Test reward calculations accuracy, verify claim transaction building, test dashboard data refresh, validate historical data display",
+        "priority": "medium",
+        "dependencies": [
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement Automated Testing and Deployment Pipeline",
+        "description": "Create comprehensive testing suite for smart contracts and frontend, setup CI/CD pipeline with Netlify, implement monitoring for trigger functions and framework health",
+        "details": "Testing and deployment:\n1. Rust unit tests for all smart contract functions\n2. Integration tests for possession tracking scenarios\n3. Jest/React Testing Library for frontend components\n4. E2E tests with Cypress for critical user flows\n5. GitHub Actions CI/CD pipeline\n6. Netlify deployment configuration with preview branches\n7. Monitoring setup for API triggers and cell state\n8. Performance benchmarks for snapshot operations\n```yaml\n# .github/workflows/ci.yml\nname: CI/CD Pipeline\non: [push, pull_request]\njobs:\n  test-contracts:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - name: Test Rust contracts\n        run: cd contracts && cargo test\n  \n  test-frontend:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Test React app\n        run: cd dapp && npm test\n```",
+        "testStrategy": "Verify all tests pass in CI, test deployment preview functionality, validate monitoring alerts, benchmark performance against requirements",
+        "priority": "low",
+        "dependencies": [
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-13T00:27:20.849Z",
+      "updated": "2025-07-13T00:27:20.849Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
